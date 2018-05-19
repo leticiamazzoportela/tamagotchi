@@ -1,29 +1,46 @@
 <?php
-
     require 'php/userClass.php';
 	$usuarios=new User();
 	$usuarios->login();
-
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="css/login.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/general.css">
+        <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="index.html">Página Inicial</a>
+            </div>
+          </div>
+        </div>
+
         <div class="container">
-            <form action="login.php" method="post" class="form-signin">
-                <h2 class="form-signin-heading">Login</h2>
-                <input type="text" class="form-control" name="usuario" placeholder="Usuario/Email" required autofocus>
-                <input type="password" class="form-control" name="senha" placeholder="Senha" required>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">
-                	<span class="glyphicon glyphicon-circle-arrow-right"></span> Acessar!
-                </button>
-            </form>
+            <div class="jumbotron text-center">
+                <h1>Login</h1>
+                <p>Acessar Meus Pets</p>
+                <p>
+                    <form action="login.php" method="post" class="form-signin form-style">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="usuario" placeholder="Usuário" required autofocus>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="senha" placeholder="Senha" required>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            <span class="glyphicon glyphicon-circle-arrow-right"></span> Acessar!
+                        </button>
+                    </form>
+                </p>
+            </div>
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>

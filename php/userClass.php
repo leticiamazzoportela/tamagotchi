@@ -23,6 +23,9 @@
                 if($_POST['senha'] === $usuario['senha']){
                     $_SESSION["usuario"] = $usuario;
                 }
+                else{
+                    echo "<script type='text/javascript'>alert('Usuário não encontrado!');javascript:window.location='login.php';</script>";
+                }
             }
 
             if(!empty($_SESSION["usuario"])){
@@ -37,12 +40,18 @@
         }
 
         public function logout(){
-            
             session_start();
             session_unset();
             session_destroy();
-            //header('Location: index.html');
-            
+            header('Location: ./index.html');
+        }
+
+        public function protege(){
+            session_start();
+            if (empty($_SESSION["usuario"])) {
+                $_SESSION["url"]=$_SERVER['REQUEST_URI'];
+                header('Location: ./login.php');
+            }
         }
 
         public function cadastrar(){
@@ -53,6 +62,7 @@
                 $mysql->bindValue(':senha', $_POST['senha'],PDO::PARAM_STR);
                 try{
                     $mysql->execute();
+                    echo "<script type='text/javascript'>alert('Cadastro efetuado com sucesso!');javascript:window.location='cadastrar.php';</script>";
                 }catch(PDOException $e){
                     echo $e->getMessage();
                 }

@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `pet` (
 DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
   `senha` varchar(50) NOT NULL,
   PRIMARY KEY (`idUsuario`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
