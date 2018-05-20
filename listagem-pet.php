@@ -30,6 +30,11 @@
                 <p>
                     <a class="btn btn-lg btn-primary" href="logout.php" role="button">Sair</a>
                 </p>
+                <p>
+                    <a class="btn btn-lg btn-primary" href="criarPet.php" role="button">criar</a>
+                </p>
+                    
+                
             </div>
         </div>
     </body>
