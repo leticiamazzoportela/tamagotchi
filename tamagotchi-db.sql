@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 21-Maio-2018 às 03:43
+-- Generation Time: 21-Maio-2018 às 12:24
 -- Versão do servidor: 5.7.19
 -- PHP Version: 7.0.23
 
@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS `pet` (
   `happyPet` int(100) NOT NULL,
   `hungerPet` int(100) NOT NULL,
   `healthPet` int(100) NOT NULL,
+  `sleepPet` int(100) NOT NULL,
   `statePet` varchar(100) NOT NULL,
+  `image` longblob NOT NULL,
   `idUsuario` int(11) NOT NULL,
   PRIMARY KEY (`idPet`),
   KEY `idUsuario` (`idUsuario`)
