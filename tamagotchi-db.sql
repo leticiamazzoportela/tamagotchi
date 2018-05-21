@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 20-Maio-2018 às 22:12
+-- Generation Time: 21-Maio-2018 às 03:43
 -- Versão do servidor: 5.7.19
--- PHP Version: 5.6.31
+-- PHP Version: 7.0.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -35,20 +35,11 @@ CREATE TABLE IF NOT EXISTS `pet` (
   `happyPet` int(100) NOT NULL,
   `hungerPet` int(100) NOT NULL,
   `healthPet` int(100) NOT NULL,
-  `sleepPet` int(11) NOT NULL,
   `statePet` varchar(100) NOT NULL,
-  `imagem` longblob NOT NULL,
   `idUsuario` int(11) NOT NULL,
   PRIMARY KEY (`idPet`),
   KEY `idUsuario` (`idUsuario`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Extraindo dados da tabela `pet`
---
-
-INSERT INTO `pet` (`idPet`, `nomePet`, `happyPet`, `hungerPet`, `healthPet`, `sleepPet`, `statePet`, `imagem`, `idUsuario`) VALUES
-(3, 'lalala', 100, 70, 100, 90, 'normal', 0x73646173, 1);
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -62,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `usuario` varchar(50) NOT NULL,
   `senha` varchar(50) NOT NULL,
   PRIMARY KEY (`idUsuario`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

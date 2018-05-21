@@ -14,7 +14,12 @@
         }
 
         public function listarPets(){
-            //$pets = $this->retPets();
+            $id = $_SESSION["id_usuario"];
+            $sql = "SELECT * FROM pet WHERE idUsuario = '".$id."'";
+            $mysql=$this->mysql->prepare($sql);
+            $mysql->execute();
+            return $mysql->fetch(PDO::FETCH_ASSOC);
+            
         }
 
         protected function conectaBd(){
@@ -25,16 +30,14 @@
         }
 
         protected function retPet($pet){
-            $sql = 'SELECT * FROM `pet` WHERE `pet`.`nomePet` = :nomePet;';
-            $mysql = $this->mysql->prepare($sql);
-            $mysql->bindValue(':nomePet', $nomePet,PDO::PARAM_STR);
-            $mysql->execute();
-            return $mysql->fetch(PDO::FETCH_ASSOC);
         }
 
         public function criarPet(){
+            session_start();
+            $id = $_SESSION["id_usuario"];
+            error_log($id);             
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql='INSERT INTO `pet` (`nomePet`, `happyPet`, `hungerPet`, `healthPet`,`sleepPet`, `statePet`, `imagem`, `idUsuario`) VALUES (:nomePet, 100, 70, 100, 90, "normal", "sdas", 1);';
+                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idUsuario) VALUES (:nomePet, 100, 70, 100, 90, 'normal', 'sdas', '$id')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{
@@ -44,6 +47,9 @@
                     echo $e->getMessage();
                 }
             }
+        }
+
+        public function deletaPet(){
         }
 
     }

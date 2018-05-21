@@ -1,4 +1,5 @@
 <?php
+    
 
     class User{
         protected $mysql;
@@ -16,18 +17,17 @@
 
         public function login(){
             session_start();
-
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $usuario = $this->retUsuario($_POST['usuario']);
-
+                $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 if($_POST['senha'] === $usuario['senha']){
                     $_SESSION["usuario"] = $usuario;
+
                 }
                 else{
                     echo "<script type='text/javascript'>alert('Usuário não encontrado!');javascript:window.location='login.php';</script>";
                 }
             }
-
             if(!empty($_SESSION["usuario"])){
                 if(empty($_SESSION["url"])){
                     header('Location: ./listagem-pet.php');
@@ -36,6 +36,7 @@
                     header('Location: '.$_SESSION["url"]);
                 }
             }
+
 
         }
 
@@ -83,6 +84,8 @@
             $mysql->execute();
             return $mysql->fetch(PDO::FETCH_ASSOC);
         }
+
+        
 
     }
 

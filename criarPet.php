@@ -1,4 +1,8 @@
 <?php
+
+    require 'php/userClass.php';    
+    $usuarios=new User();
+
     require 'php/petClass.php';
 	  $pets=new Pet();
 	  $pets->criarPet();
@@ -25,8 +29,8 @@
     
         <div class="container">
           <div class="jumbotron text-center">
-            <h1>Cadastre-se!</h1>
-            <p>Preencha os dados abaixo para criar seu novo Pet!</p>
+            <h1>Crie seu Pet!</h1>
+            <p>Digite abaixo um nome para seu pet!</p>
             <p>
             <form action="criarPet.php" method="post" class="form-horizontal form-style">
                 <div class="form-group">
