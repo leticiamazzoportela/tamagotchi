@@ -24,11 +24,11 @@
         </div>
 
         <div class="container">
-            <div class="jumbotron text-center">
+            <div class="jumbotron text-center" style="width: 50%; margin-left: 25%;">
                 <h1>Login</h1>
                 <p>Acessar Meus Pets</p>
                 <p>
-                    <form action="login.php" method="post" class="form-signin form-style">
+                    <form action="login.php" method="post" class="form-signin" style="width: 60%; margin-left: 20%;">
                         <div class="form-group">
                             <input type="text" class="form-control" name="usuario" placeholder="Usuário" required autofocus>
                         </div>

@@ -22,7 +22,7 @@
         <div class="navbar navbar-default navbar-static-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
-              <a class="navbar-brand" href="index.html">Página Inicial</a>
+              <a class="navbar-brand" href="listagem-pet.php">Visualizar Pets</a>
             </div>
           </div>
         </div>

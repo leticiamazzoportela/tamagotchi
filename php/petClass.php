@@ -18,8 +18,7 @@
             $sql = "SELECT * FROM pet WHERE idUsuario = '".$id."'";
             $mysql=$this->mysql->prepare($sql);
             $mysql->execute();
-            return $mysql->fetch(PDO::FETCH_ASSOC);
-            
+            return $mysql->fetchAll(PDO::FETCH_ASSOC);
         }
 
         protected function conectaBd(){
@@ -35,9 +34,10 @@
         public function criarPet(){
             session_start();
             $id = $_SESSION["id_usuario"];
+            $src = 'tenor.gif'; //add outras imagens depois, por causa das fases do bicho
             error_log($id);             
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idUsuario) VALUES (:nomePet, 100, 70, 100, 90, 'normal', 'sdas', '$id')";
+                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idUsuario) VALUES (:nomePet, 40, 100, 49, 70, 'normal', '$src', '$id')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{

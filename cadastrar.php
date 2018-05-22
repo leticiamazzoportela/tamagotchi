@@ -24,11 +24,11 @@
         </div>
     
         <div class="container">
-          <div class="jumbotron text-center">
+          <div class="jumbotron text-center" style="width: 50%; margin-left: 25%;">
             <h1>Cadastre-se!</h1>
             <p>Preencha os dados abaixo para se cadastrar no sistema e poder cuidar de vários pets virtuais!</p>
             <p>
-            <form action="cadastrar.php" method="post" class="form-horizontal form-style">
+            <form action="cadastrar.php" method="post" class="form-horizontal" style="width: 60%; margin-left: 20%;">
                 <div class="form-group">
                    	<input type="text" class="form-control" id="inputUsuario" name="usuario" placeholder="Usuário" required>
                 </div>
