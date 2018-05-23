@@ -2,7 +2,7 @@
 
     class Pet{
         protected $mysql;
-        //protected $horaInicial = date('H:i:s');
+
         protected $db = array(
             'servidor'=>'localhost',
             'database'=>'tamagotchi-db',
@@ -70,6 +70,30 @@
         }
 
         public function deletaPet(){
+            $id = $_SESSION["id_usuario"];
+            if ($_SERVER['REQUEST_METHOD']=='POST') {
+                $query = "SELECT `idPet` FROM `pet` WHERE `idUsuario` = '".$id."'";
+                $mysql=$this->mysql->prepare($query);
+                $mysql->execute();
+                $idPet = $mysql->fetch(PDO::FETCH_ASSOC);
+
+                if(!empty($idPet)){
+                    foreach($idPet as $atual){
+                        $sql="DELETE FROM `pet` WHERE `idPet` = '".$atual."'";   
+                        $mysql=$this->mysql->prepare($sql);
+                        
+                        try{
+                            $mysql->execute();
+                            echo "<script type='text/javascript'>alert('Pet assassinado com sucesso!');javascript:window.location='listagem-pet.php';</script>";
+                        }catch(PDOException $e){
+                            echo $e->getMessage();
+                        }
+                    }    
+                }
+                else{
+                    echo "<script type='text/javascript'>alert('Não há Pets para excluir!');javascript:window.location='listagem-pet.php';</script>";
+                }
+            }
         }
 
     }
