@@ -28,6 +28,9 @@ SET time_zone = "+00:00";
 -- Estrutura da tabela `pet`
 --
 
+CREATE DATABASE IF NOT EXISTS `tamagotchi-db`;
+USE `tamagotchi-db`;
+
 DROP TABLE IF EXISTS `pet`;
 CREATE TABLE IF NOT EXISTS `pet` (
   `idPet` int(11) NOT NULL AUTO_INCREMENT,
@@ -37,8 +40,9 @@ CREATE TABLE IF NOT EXISTS `pet` (
   `healthPet` int(100) NOT NULL,
   `sleepPet` int(100) NOT NULL,
   `statePet` varchar(100) NOT NULL,
-  `image` longblob NOT NULL,
+  `imagem` varchar(100) NOT NULL,
   `idUsuario` int(11) NOT NULL,
+  `idade` int(11) NOT NULL,
   PRIMARY KEY (`idPet`),
   KEY `idUsuario` (`idUsuario`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
