@@ -5,7 +5,10 @@
 
     require 'php/petClass.php';
 	  $pets=new Pet();
-	  $pets->criarPet();
+    $pets->criarPet();
+    
+    if(isset($_POST['criar']))
+      header('Location: ./listagem-pet.php');
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +39,7 @@
                 <div class="form-group">
                    	<input type="text" class="form-control" id="inputNome" name="nomePet" placeholder="Nome:" required>
                 </div>
-                <button class="btn btn-lg btn-danger btn-block" type="submit">
+                <button name="criar" class="btn btn-lg btn-danger btn-block" type="submit">
                 	<span class="glyphicon glyphicon-circle-arrow-right"></span> Criar!
                 </button>
             </form>

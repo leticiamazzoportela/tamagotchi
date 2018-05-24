@@ -2,7 +2,7 @@
 
     class Pet{
         protected $mysql;
-        //protected $horaInicial = date('H:i:s');
+
         protected $db = array(
             'servidor'=>'localhost',
             'database'=>'tamagotchi-db',
@@ -20,6 +20,16 @@
             $mysql=$this->mysql->prepare($sql);
             $mysql->execute();
             return $mysql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        public function retPet($petAtual){
+            //if ($_SERVER['REQUEST_METHOD']=='POST') {
+                $sql="SELECT * FROM `pet` WHERE `pet`.`idPet` = '$petAtual'";
+                $mysql=$this->mysql->prepare($sql);
+                $mysql->bindValue(':idPet', $petAtual,PDO::PARAM_STR);
+                $mysql->execute();
+                return $mysql->fetch(PDO::FETCH_ASSOC);
+            //}
         }
 
         protected function conectaBd(){
@@ -44,7 +54,6 @@
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{
                     $mysql->execute();
-                    echo "<script type='text/javascript'>alert('Pet Criado com sucesso!');javascript:window.location='criarPet.php';</script>";
                 }catch(PDOException $e){
                     echo $e->getMessage();
                 }
@@ -70,6 +79,30 @@
         }
 
         public function deletaPet(){
+            $id = $_SESSION["id_usuario"];
+            //if ($_SERVER['REQUEST_METHOD']=='POST') {
+                $query = "SELECT `idPet` FROM `pet` WHERE `idUsuario` = '".$id."'";
+                $mysql=$this->mysql->prepare($query);
+                $mysql->execute();
+                $idPet = $mysql->fetch(PDO::FETCH_ASSOC);
+
+                if(!empty($idPet)){
+                    foreach($idPet as $atual){
+                        $sql="DELETE FROM `pet` WHERE `idPet` = '".$atual."'";   
+                        $mysql=$this->mysql->prepare($sql);
+                        
+                        try{
+                            $mysql->execute();
+                            echo "<script type='text/javascript'>alert('Pet assassinado com sucesso!');javascript:window.location='listagem-pet.php';</script>";
+                        }catch(PDOException $e){
+                            echo $e->getMessage();
+                        }
+                    }    
+                }
+                else{
+                    echo "<script type='text/javascript'>alert('Não há Pets para excluir!');javascript:window.location='listagem-pet.php';</script>";
+                }
+            //}
         }
 
     }
