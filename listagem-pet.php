@@ -45,13 +45,15 @@
          -->
         </head>
         
-        <body>
+        <body style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
         <nav class="navbar navbar-dark bg-dark"> <!-- Menu --> 
             <div class="container">
                 <div class="navbar-header">
-                <a class="btn btn-outline-success menu-nav" href="criarPet.php" role="button">Criar</a>
-                <a class="btn btn-outline-primary" href="#lista-pets" data-toggle="modal" role="button">Trocar Pet</a>
-                <a class="btn btn-outline-danger" href="logout.php" role="button">Sair</a>
+                    <a class="btn btn-outline-success menu-nav" href="criarPet.php" role="button">Criar</a>
+                    <a class="btn btn-outline-primary" href="#lista-pets" data-toggle="modal" role="button">Trocar Pet</a>
+                    <a class="btn btn-outline-danger" href="logout.php" role="button">Sair</a>
+                </div>
+                    <h1 style="color: white;"> <?php echo $petAtual['nomePet']; ?></h1>
             </div>
         </div>
         </nav> <!-- Fim Menu -->
@@ -87,9 +89,9 @@
 
         <br>
 
-        <div class="container"> <!-- Área com dados do Pet -->
+        <div class="container" style="margin-left: 5%;"> <!-- Área com dados do Pet -->
             <div align="center" style="width: 50%; margin-left: 25%;">
-                <table class="table" align="center" style="width: 80%;">
+                <table class="table table-borderless" align="center" style="width: 80%;">
                     <thead class="bg-success">
                         <tr>
                             <th scope="col">Happy</th>
@@ -145,9 +147,8 @@
                     </tbody>
                 </table>
                 <?php //foreach($resultado as $item){ ?>
-                    <div class="container" align="center">
+                    <div class="container" align="center" style="margin-top: 21%;">
                         <img src="images/<?=$petAtual['imagem']?>" />
-                        <h1> <?php echo $petAtual['nomePet']; ?></h1>
                     </div>
                     <?php// } ?>
                     

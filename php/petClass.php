@@ -42,14 +42,15 @@
         public function criarPet(){
             session_start();
             $id = $_SESSION["id_usuario"];
-            $src_normal_triste = 'tails-normal.gif';
+            $src = 'bb';
             /*$src_bravo = 'tails-bravo.gif';
+            $src_normal_triste = 'tails-normal.gif';
             $src_cansado = 'tails-cansado.gif';
             $src_feliz = 'tails-feliz.gif';*/
 
             error_log($id);             
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 40, 100, 49, 70, 'normal', '$src_normal_triste', 0, '$id')";
+                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 40, 100, 49, 70, 'normal', '$src', 0, '$id')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{
