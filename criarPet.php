@@ -10,7 +10,8 @@
     
     require 'php/minigamesClass.php';
     $game = new Minigame();
-    $game->criaMinigame($idPet);
+    if(!empty($idPet))
+      $game->criaMinigame($idPet);
     
     if(isset($_POST['criar']))
       header('Location: ./listagem-pet.php');

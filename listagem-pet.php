@@ -9,32 +9,65 @@
     $pets = new Pet();
     $resultado = $pets->listarPets();
 
-    if(isset($_POST['petAtual']))  
-        $teste = $_POST['petAtual'];
-    else if(count($resultado) > 0)
-            $teste = $resultado[0]['idPet'];
+    /**** LISTAR PETS DISPONÍVEIS E TROCAR*/
+        if(isset($_POST['petAtual']))  
+            $teste = $_POST['petAtual'];
+        else if(count($resultado) > 0)
+                $teste = $resultado[0]['idPet'];
 
-    if(!empty($teste))
-        $petAtual = $pets->retPet($teste);
-    else
-        header('Location: ./criarPet.php');
+        if(!empty($teste))
+            $petAtual = $pets->retPet($teste);
+        else
+            header('Location: ./criarPet.php');
+    /**FIM LISTAR PETS DISPONÍVEIS */
 
-    if(isset($_POST['deletar']))
-        $pets->deletaPet();
+    /** MATAR PET */
+        if(isset($_POST['deletar']))
+            $pets->deletaPet();
+    /** FIM MATAR PET */
 
-    $game = new Minigame();
-    $resGame = $game->listarMinigames($teste);
+    /** CONTROLE MINIGAME */
+        $game = new Minigame();
+        $resGame = $game->listarMinigames($teste);
 
-    if(isset($_POST['petM']) && isset($_POST['minigameAtual'])){
-        $idP = $_POST['petM'];
-        $idM = $_POST['minigameAtual'];
-    }
+        if(isset($_POST['petM']) && isset($_POST['minigameAtual'])){
+            $idP = $_POST['petM'];
+            $idM = $_POST['minigameAtual'];
+        }
 
-    if(!empty($idP) && !empty($idM)){ //talvez mover essa parte pro pedra-papel-tesoura
-        //$minigameAtual = $game->retGame($idP, $idM);
-        if($idM == 'Pedra - Papel - Tesoura')
-            header('Location: minigames/pedra-papel-tesoura.php');
-    }
+        if(!empty($idP) && !empty($idM)){ //talvez mover essa parte pro pedra-papel-tesoura
+            //$minigameAtual = $game->retGame($idP, $idM);
+            if($idM == 'Pedra - Papel - Tesoura'){
+                header("Location: minigames/pedra-papel-tesoura.php?idP=$idP");
+            }
+        }
+    /** FIM CONTROLE MINIGAME */
+
+    /** CONTROLE ALIMENTAR */
+        if(isset($_POST['Coelho'])){
+            $pets->alimentar($_POST['Coelho'], $teste);
+        }
+        else if(isset($_POST['Rato'])){
+            $pets->alimentar($_POST['Rato'], $teste);
+        }
+        else if(isset($_POST['Pássaro'])){
+            $pets->alimentar($_POST['Pássaro'], $teste);
+        }
+        else if(isset($_POST['Fruta'])){
+            $pets->alimentar($_POST['Fruta'], $teste);
+        }
+        else if(isset($_POST['Inseto'])){
+            $pets->alimentar($_POST['Inseto'], $teste);
+        }
+    /** FIM CONTROLE ALIMENTAR */
+
+    /** CONTROLE CURAR */
+
+    /** FIM CONTROLE CURAR */
+
+    /** CONTROLE NINAR */
+
+    /** FIM CONTROLE NINAR */
 ?>
 
 <!DOCTYPE html>
@@ -78,9 +111,9 @@
         <div class="modal fade" id="lista-pets" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary" style="color: white;">
                         <h4 class="modal-title" id="modalLabel">Meus Pets</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" style="color: white" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -91,7 +124,7 @@
                                 ?>
                                 <form action="listagem-pet.php" method="post">
                                     <input type="hidden" id="petAtual" name="petAtual" value="<?=$name['idPet']?>"></input>
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-primary">
                                         <?php echo $name['nomePet'];?>
                                     </button>
                                     <a href=></a>
@@ -107,9 +140,9 @@
         <div class="modal fade" id="lista-minigames" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="background-color: green; color: white;">
                         <h4 class="modal-title" id="modalLabel">Minigames</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" style="color: white" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -133,6 +166,33 @@
                 </div>
             </div>
         </div> <!-- Fim Modal Minigames -->
+
+        <!-- Modal Alimentar -->
+        <div class="modal fade" id="lista-comidas" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger" style="color: white;">
+                        <h4 class="modal-title" id="modalLabel">Alimentar</h4>
+                        <button type="button" class="close" style="color: white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="listagem-pet.php" method="post">
+                            <input type="submit" class="btn btn-danger" id="Coelho" name="Coelho" value="Coelho"></input>
+                            <input type="submit" class="btn btn-danger" id="Rato" name="Rato" value="Rato"></input>
+                            <input type="submit" class="btn btn-danger" id="Pássaro" name="Pássaro" value="Pássaro"></input>
+                            <input type="submit" class="btn btn-danger" id="Fruta" name="Fruta" value="Fruta"></input>
+                            <input type="submit" class="btn btn-danger" id="Inseto" name="Inseto" value="Inseto"></input>
+                        </form>
+                        <br><br>
+                    </div>
+                    <div class="modal-footer">
+                    <p style="font-weight: bold;">Cuidado! Alguns alimentos podem ser perigosos com o tempo...</p>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Fim Modal Alimentar -->
 
         <br>
 
@@ -219,7 +279,7 @@
                                         })
                                     </script> -->
 
-                                    <a id="alimentar" class="btn btn-outline-danger rounded-circle" role="button" href="#lista-minigames" data-toggle="modal">
+                                    <a id="alimentar" class="btn btn-outline-danger rounded-circle" role="button" href="#lista-comidas" data-toggle="modal">
                                         <i class="fas fa-utensils"></i>
                                     </a>
                                 </th>
