@@ -1,16 +1,18 @@
 <?php
     require 'php/userClass.php';
     require 'php/petClass.php';
+    require 'php/minigamesClass.php';
     
     $usuarios = new User();
     $usuarios->protege();
     
     $pets = new Pet();
     $resultado = $pets->listarPets();
+
     if(isset($_POST['petAtual']))  
-        $teste= $_POST['petAtual'];
+        $teste = $_POST['petAtual'];
     else if(count($resultado) > 0)
-            $teste= $resultado[0]['idPet'];
+            $teste = $resultado[0]['idPet'];
 
     if(!empty($teste))
         $petAtual = $pets->retPet($teste);
@@ -19,6 +21,20 @@
 
     if(isset($_POST['deletar']))
         $pets->deletaPet();
+
+    $game = new Minigame();
+    $resGame = $game->listarMinigames($teste);
+
+    if(isset($_POST['petM']) && isset($_POST['minigameAtual'])){
+        $idP = $_POST['petM'];
+        $idM = $_POST['minigameAtual'];
+    }
+
+    if(!empty($idP) && !empty($idM)){ //talvez mover essa parte pro pedra-papel-tesoura
+        //$minigameAtual = $game->retGame($idP, $idM);
+        if($idM == 'Pedra - Papel - Tesoura')
+            header('Location: minigames/pedra-papel-tesoura.php');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +74,7 @@
         </div>
         </nav> <!-- Fim Menu -->
 
-        <!-- Modal -->
+        <!-- Modal Pets -->
         <div class="modal fade" id="lista-pets" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -71,10 +87,10 @@
                     <div class="modal-body">
                         <?php
                             foreach($resultado as $name){ 
-                                $teste=$name['idPet']
+                                //$teste = $name['idPet'];
                                 ?>
                                 <form action="listagem-pet.php" method="post">
-                                    <input type="hidden" id="petAtual" name="petAtual" value="<?=$name['idPet']?>" placeholder="Id do Pet"></input>
+                                    <input type="hidden" id="petAtual" name="petAtual" value="<?=$name['idPet']?>"></input>
                                     <button type="submit" class="btn btn-success">
                                         <?php echo $name['nomePet'];?>
                                     </button>
@@ -86,13 +102,44 @@
                 </div>
             </div>
         </div> <!-- Fim Modal -->
+        
+        <!-- Modal Minigames -->
+        <div class="modal fade" id="lista-minigames" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modalLabel">Minigames</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <?php
+                            foreach($resGame as $minigame){ 
+                                $idP = $minigame['idPet']; //é = ao $teste
+                                $idM = $minigame['nomeMinigame'];
+                                ?>
+                                <form action="listagem-pet.php" method="post">
+                                    <input type="hidden" id="petM" name="petM" value="<?=$minigame['idPet']?>"></input>
+                                    <input type="hidden" id="minigameAtual" name="minigameAtual" value="<?=$minigame['nomeMinigame']?>"</input>
+                                    <button type="submit" class="btn btn-success">
+                                        <?php echo $minigame['nomeMinigame'];?>
+                                    </button>
+                                    <a href=></a>
+                                </form>
+                                <br><br>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Fim Modal Minigames -->
 
         <br>
 
         <div class="container" style="margin-left: 5%;"> <!-- Área com dados do Pet -->
             <div align="center" style="width: 50%; margin-left: 25%;">
-                <table class="table table-borderless" align="center" style="width: 80%;">
-                    <thead class="bg-success">
+                <table class="table" align="center" style="width: 80%; margin-top: 2%;">
+                    <thead class="table-dark">
                         <tr>
                             <th scope="col">Happy</th>
                             <th scope="col">Hunger</th>
@@ -153,10 +200,10 @@
                     <?php// } ?>
                     
                     <table class="table" align="center" style="width: 80%; margin-top: 8%;">
-                        <thead class="bg-success">
+                        <thead class="table-dark">
                             <tr>
                                 <th scope="col">
-                                    <script>
+                                    <!-- <script>
                                         $(function () {
                                             $('#alimentar').popover({
                                                 html: true,
@@ -170,35 +217,35 @@
                                                 content: '<a class="btn rounded-circle" href="criarPet.php" role="button"><img src="https://png.icons8.com/dusk/30/000000/music.png"></img></a> <a class="btn rounded-circle" href="criarPet.php" role="button"><img src="https://png.icons8.com/dusk/30/000000/puzzle.png"></img></a>'
                                             })
                                         })
-                                    </script>
+                                    </script> -->
 
-                                    <a id="alimentar" class="btn btn-outline-dark rounded-circle" role="button" data-toggle="popover" data-trigger="focus" tabindex="0" data-placement="bottom" title="Alimentar">
+                                    <a id="alimentar" class="btn btn-outline-danger rounded-circle" role="button" href="#lista-minigames" data-toggle="modal">
                                         <i class="fas fa-utensils"></i>
                                     </a>
                                 </th>
                                 <th scope="col">
-                                    <button id="banho" class="btn btn-outline-dark rounded-circle" role="button">
+                                    <button id="banho" class="btn btn-outline-primary rounded-circle" role="button">
                                         <i class="fas fa-shower"></i>
                                     </button>
                             </th>
                             <th scope="col">
-                                <a id="minigame" class="btn btn-outline-dark rounded-circle" role="button" data-toggle="popover" data-trigger="focus" tabindex="0" data-placement="bottom" title="Minigames">
+                                <a id="minigame" class="btn btn-outline-success rounded-circle"  role="button" href="#lista-minigames" data-toggle="modal">
                                     <i class="fas fa-gamepad"></i>
                                 </a>
                             </th>
                             <th scope="col">
-                                <button class="btn btn-outline-dark rounded-circle" href="criarPet.php">
+                                <button class="btn btn-outline-info rounded-circle" href="criarPet.php">
                                     <i class="fas fa-bed"></i>
                                     </button>
                             </th>
                             <th scope="col">
-                                <button class="btn btn-outline-dark rounded-circle" href="criarPet.php">
+                                <button class="btn btn-outline-danger rounded-circle" href="criarPet.php">
                                     <i class="fas fa-syringe"></i>
                                     </button>
                             </th>
                             <th scope="col">
                                 <form action="listagem-pet.php" method="post">
-                                    <button name="deletar" class="btn btn-outline-dark rounded-circle" type="submit">
+                                    <button name="deletar" class="btn btn-outline-secondary rounded-circle" type="submit">
                                         <i class="fas fa-skull"></i>
                                     </button>
                                 </form>

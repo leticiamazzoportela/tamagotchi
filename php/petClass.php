@@ -26,7 +26,7 @@
             //if ($_SERVER['REQUEST_METHOD']=='POST') {
                 $sql="SELECT * FROM `pet` WHERE `pet`.`idPet` = '$petAtual'";
                 $mysql=$this->mysql->prepare($sql);
-                $mysql->bindValue(':idPet', $petAtual,PDO::PARAM_STR);
+                $mysql->bindValue(':idPet', $petAtual,PDO::PARAM_INT);
                 $mysql->execute();
                 return $mysql->fetch(PDO::FETCH_ASSOC);
             //}
@@ -59,6 +59,19 @@
                     echo $e->getMessage();
                 }
             }
+        }
+
+        public function retIDPet(){
+            $id = $_SESSION["id_usuario"];
+            $query = "SELECT LAST_INSERT_ID()";
+            $mysql=$this->mysql->prepare($query);
+            $mysql->execute();
+            $atual = $mysql->fetchColumn();
+            
+            if(!empty($atual))
+                return $atual;
+            else
+                return 0;
         }
 
         public function atualizarStatusPet(){

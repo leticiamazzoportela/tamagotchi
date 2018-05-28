@@ -62,6 +62,23 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 COMMIT;
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `minigames`
+--
+
+DROP TABLE IF EXISTS `minigames`;
+CREATE TABLE IF NOT EXISTS `minigames` (
+  `idMinigame` int(11) NOT NULL AUTO_INCREMENT,
+  `nomeMinigame` varchar(50) NOT NULL,
+  `pontuacao` int(11),
+  `idPet` int(11) NOT NULL,
+  PRIMARY KEY (`idMinigame`),
+  KEY `idPet` (`idPet`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

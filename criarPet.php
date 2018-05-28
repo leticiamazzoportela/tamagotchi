@@ -6,9 +6,15 @@
     require 'php/petClass.php';
 	  $pets=new Pet();
     $pets->criarPet();
+    $idPet = $pets->retIDPet();
+    
+    require 'php/minigamesClass.php';
+    $game = new Minigame();
+    $game->criaMinigame($idPet);
     
     if(isset($_POST['criar']))
       header('Location: ./listagem-pet.php');
+    
 ?>
 
 <!DOCTYPE html>
