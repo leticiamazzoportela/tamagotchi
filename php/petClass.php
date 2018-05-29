@@ -16,7 +16,7 @@
 
         public function listarPets(){
             $id = $_SESSION["id_usuario"];
-            $sql = "SELECT * FROM pet WHERE idUsuario = '".$id."'";
+            $sql = "SELECT * FROM pet WHERE idUsuario = $id";
             $mysql=$this->mysql->prepare($sql);
             $mysql->execute();
             return $mysql->fetchAll(PDO::FETCH_ASSOC);
@@ -50,7 +50,7 @@
 
             error_log($id);             
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 40, 50, 49, 70, 'normal', '$src', 0, '$id')";
+                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 50, 50, 50, 50, 'cansado', '$src', 0, '$id')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{
@@ -174,18 +174,78 @@
             header('Location: ./listagem-pet.php');
         }
 
-        public function banhar(){
+        public function banhar($idPet){
+            $sql = "SELECT statePet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $estado = $mysql->fetchColumn();
+
+            if($estado == 'sujo'){
+                $query="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";
+                $mysql=$this->mysql->prepare($query);
+                $mysql->execute();
+                header('Location: ./listagem-pet.php');
+            }
+            else{
+                echo "<script type='text/javascript'>alert('Eeei! Já estou limpo!');javascript:window.location='listagem-pet.php';</script>"; 
+            }
+            
+        }
+
+        public function controleEstadosGerais($idPet){
 
         }
 
-        public function curar(){
+        public function curar($idPet){
+            $doente = "SELECT healthPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($doente);
+            $mysql->execute();
+            $statusDoente = $mysql->fetchColumn();
 
+            $sql = "SELECT statePet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $estado = $mysql->fetchColumn();
+
+            if($statusDoente <= 20){
+                $novoHealth = $statusDoente + 10;
+                if($novoHealth > 20)
+                    $novoStatus = 'normal';
+                else
+                    $novoStatus = 'doente';
+            }
+            else if($estado == 'normal'){
+                $novoHealth = 20;
+                $novoStatus = 'doente';
+            }
+            
+            $queryHealth="UPDATE pet SET healthPet = $novoHealth WHERE idPet = $idPet";
+            $mysql=$this->mysql->prepare($queryHealth);
+            $mysql->execute();
+
+            $queryDoente="UPDATE pet SET statePet = '$novoStatus' WHERE idPet = $idPet";
+            $mysql=$this->mysql->prepare($queryDoente);
+            $mysql->execute();
+
+            header('Location: ./listagem-pet.php');
+            
         }
 
-        public function ninar(){
+        public function ninar($idPet){
+            $sql = "SELECT statePet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $estado = $mysql->fetchColumn();
 
+            if($estado == 'cansado'){
+                //passa um tempo e aí atualiza
+                $query="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";
+                $mysql=$this->mysql->prepare($query);
+                $mysql->execute();
+            }
+            
+            header('Location: ./listagem-pet.php'); 
         }
 
     }
-
 ?>

@@ -112,6 +112,10 @@
               //  echo $this->mostrarJogo('pedra-papel-tesoura');
             //}
         }
+
+        public function ranking(){
+            
+        }
     }
 
 ?>
