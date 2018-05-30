@@ -22,7 +22,8 @@
                 $_SESSION["id_usuario"] = $usuario["idUsuario"];
                 if($_POST['senha'] === $usuario['senha']){
                     $_SESSION["usuario"] = $usuario;
-
+                    $_SESSION["tempo"] = $usuario['tempo'];
+                    error_log($_SESSION["tempo"]);
                 }
                 else{
                     echo "<script type='text/javascript'>alert('Usuário não encontrado!');javascript:window.location='login.php';</script>";
@@ -42,6 +43,10 @@
 
         public function logout(){
             session_start();
+            $tempo = $_SESSION["tempo"];
+            $queryHealth="UPDATE usuario SET tempo = $tempo";
+            $mysql=$this->mysql->prepare($queryHealth);
+            $mysql->execute();
             session_unset();
             session_destroy();
             header('Location: ./index.html');
@@ -56,8 +61,9 @@
         }
 
         public function cadastrar(){
+            $tempo = time();            
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql='INSERT INTO `usuario` (`usuario`, `senha`) VALUES (:usuario,:senha);';
+                $sql="INSERT INTO usuario (usuario, senha, tempo) VALUES (:usuario,:senha, '$tempo')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':usuario', $_POST['usuario'],PDO::PARAM_STR);
                 $mysql->bindValue(':senha', $_POST['senha'],PDO::PARAM_STR);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 21-Maio-2018 às 12:24
+-- Generation Time: 30-Maio-2018 às 20:17
 -- Versão do servidor: 5.7.19
 -- PHP Version: 7.0.23
 
@@ -25,11 +25,35 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `pet`
+-- Estrutura da tabela `minigames`
 --
 
-CREATE DATABASE IF NOT EXISTS `tamagotchi-db`;
-USE `tamagotchi-db`;
+DROP TABLE IF EXISTS `minigames`;
+CREATE TABLE IF NOT EXISTS `minigames` (
+  `idMinigame` int(11) NOT NULL AUTO_INCREMENT,
+  `nomeMinigame` varchar(50) NOT NULL,
+  `pontuacao` int(11) DEFAULT NULL,
+  `idPet` int(11) NOT NULL,
+  PRIMARY KEY (`idMinigame`),
+  KEY `idPet` (`idPet`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `minigames`
+--
+
+INSERT INTO `minigames` (`idMinigame`, `nomeMinigame`, `pontuacao`, `idPet`) VALUES
+(1, 'Pedra - Papel - Tesoura', 0, 1),
+(2, 'Pedra - Papel - Tesoura', 0, 2),
+(3, 'Pedra - Papel - Tesoura', 0, 3),
+(4, 'Pedra - Papel - Tesoura', 0, 4),
+(5, 'Pedra - Papel - Tesoura', 0, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `pet`
+--
 
 DROP TABLE IF EXISTS `pet`;
 CREATE TABLE IF NOT EXISTS `pet` (
@@ -45,7 +69,11 @@ CREATE TABLE IF NOT EXISTS `pet` (
   `idade` int(11) NOT NULL,
   PRIMARY KEY (`idPet`),
   KEY `idUsuario` (`idUsuario`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `pet`
+--
 
 -- --------------------------------------------------------
 
@@ -58,26 +86,14 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `usuario` varchar(50) NOT NULL,
   `senha` varchar(50) NOT NULL,
+  `tempo` bigint(20) NOT NULL,
   PRIMARY KEY (`idUsuario`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-COMMIT;
-
--- --------------------------------------------------------
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
--- Estrutura da tabela `minigames`
+-- Extraindo dados da tabela `usuario`
 --
 
-DROP TABLE IF EXISTS `minigames`;
-CREATE TABLE IF NOT EXISTS `minigames` (
-  `idMinigame` int(11) NOT NULL AUTO_INCREMENT,
-  `nomeMinigame` varchar(50) NOT NULL,
-  `pontuacao` int(11),
-  `idPet` int(11) NOT NULL,
-  PRIMARY KEY (`idMinigame`),
-  KEY `idPet` (`idPet`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

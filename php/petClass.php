@@ -193,7 +193,128 @@
         }
 
         public function controleEstadosGerais($idPet){
+            $tempo = time();
+            $Dtime = $tempo - $_SESSION["tempo"];
+            $sql = "SELECT statePet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $state= $mysql->fetchColumn();
 
+            $fome = hungry($Dtime, $state);
+            $felicidade = happy($Dtime, $state);
+            $sono = sleep($Dtime, $state);
+            $saude = health($Dtime, $state);
+
+            $estado = 'normal';
+
+            if ($fome > 50){
+                $estado = 'fome';
+            }
+            if($felicidade > 50){
+                $estado = 'triste';                
+            }
+            elseif(($felicidade > 90) && ($fome > 80) && ($sono > 80) && ($saude > 80)){
+                $estado = 'feliz';
+            }
+            if ($sono > 50){
+                $estado = 'cansado';                
+            }
+            if ($saude > 20){
+                $estado = 'doente';
+            }
+
+            $queryState="UPDATE pet SET healthPet = $saude, happyPet = $felicidade, hunguerPer = $fome, sleepPet = $sono, statePet = $estado WHERE idPet = $idPet";
+            $mysql=$this->mysql->prepare($queryState);
+            $mysql->execute();
+
+        }
+
+        public function hungry($Dtime, $state){
+            if ($state == 'normal'){
+                $fome = $Dtime/120;
+            }
+            if ($state == 'feliz'){
+                $fome = $Dtime/180;
+            }
+            if ($state == 'cansado'){
+                $fome = $Dtime/100;
+            }
+            if ($state == 'triste'){
+                $fome = $Dtime/120;
+            }
+            if ($state == 'fome'){
+                $fome = $Dtime/60;
+            }
+            if ($state == 'doente'){
+                $fome = $Dtime/120;
+            }
+            return $fome;
+        }
+
+        public function happy($Dtime, $state){
+            if ($state == 'normal'){
+                $felicidade = $Dtime/180;
+            }
+            if ($state == 'feliz'){
+                $felicidade = $Dtime/250;
+            }
+            if ($state == 'cansado'){
+                $felicidade = $Dtime/100;
+            }
+            if ($state == 'triste'){
+                $felicidade = $Dtime/60;
+            }
+            if ($state == 'fome'){
+                $felicidade = $Dtime/80;
+            }
+            if ($state == 'doente'){
+                $felicidade = $Dtime/80;
+            }
+            return $felicidade;
+        }
+
+        public function sleep($Dtime, $state){
+            if ($state == 'normal'){
+                $sono = $Dtime/250;
+            }
+            if ($state == 'feliz'){
+                $sono = $Dtime/300;
+            }
+            if ($state == 'cansado'){
+                $sono = $Dtime/60;
+            }
+            if ($state == 'triste'){
+                $sono = $Dtime/100;
+            }
+            if ($state == 'fome'){
+                $sono = $Dtime/80;
+            }
+            if ($state == 'doente'){
+                $sono = $Dtime/70;
+            }
+            return $sono;
+        }
+
+        public function health($Dtime, $state){
+            if ($state == 'normal'){
+                $saude = $Dtime/250;
+            }
+            if ($state == 'feliz'){
+                $saude = $Dtime/300;
+            }
+            if ($state == 'cansado'){
+                $saude = $Dtime/230;
+            }
+            if ($state == 'triste'){
+                $saude = $Dtime/180;
+            }
+            if ($state == 'fome'){
+                $saude = $Dtime/100;
+            }
+            if ($state == 'doente'){
+                $saude = $Dtime/60;
+            }
+            return $saude;
         }
 
         public function curar($idPet){
@@ -206,6 +327,8 @@
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $estado = $mysql->fetchColumn();
+            error_log($estado);
+            
 
             if($statusDoente <= 20){
                 $novoHealth = $statusDoente + 10;
