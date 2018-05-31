@@ -44,8 +44,8 @@
         public function logout(){
             session_start();
             $tempo = $_SESSION["tempo"];
-            $queryHealth="UPDATE usuario SET tempo = $tempo";
-            $mysql=$this->mysql->prepare($queryHealth);
+            $query="UPDATE usuario SET tempo = $tempo";
+            $mysql=$this->mysql->prepare($query);
             $mysql->execute();
             session_unset();
             session_destroy();

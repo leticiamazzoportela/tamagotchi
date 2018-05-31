@@ -50,7 +50,7 @@
 
             error_log($id);             
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 50, 50, 50, 50, 'cansado', '$src', 0, '$id')";
+                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 50, 50, 50, 50, 'normal', '$src', 0, '$id')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{
@@ -111,40 +111,24 @@
                     $fome = $fomeAntiga+10;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
-
-                $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
             }
             else if($tipoComida == 'Rato'){
                 if($fomeAntiga <= 92)
                     $fome = $fomeAntiga+8;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
-
-                $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
             }
             else if($tipoComida == 'Pássaro'){
                 if($fomeAntiga <= 95)
                     $fome = $fomeAntiga+5;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
-
-                $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
             }
             else if($tipoComida == 'Fruta'){
                 if($fomeAntiga <= 97)
                     $fome = $fomeAntiga+3;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
-
-                $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
             }
             else if($tipoComida == 'Inseto'){
                 //Essa alimenta ele, mas deixa ele doentinho
@@ -158,10 +142,6 @@
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
 
-                $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
-
                 if($doenteAntiga >= 10)
                     $doenteAtual = $doenteAntiga-10;
                 else
@@ -170,7 +150,17 @@
                 $queryDoente="UPDATE pet SET healthPet = '$doenteAtual' WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($queryDoente);
                 $mysql->execute();
+
+                if($doenteAtual <= 20){
+                    $qDoente="UPDATE pet SET statePet = 'doente' WHERE idPet = $idPet";
+                    $mysql=$this->mysql->prepare($qDoente);
+                    $mysql->execute();
+                }
             }
+            $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
+            $mysql=$this->mysql->prepare($query);
+            $mysql->execute();
+
             header('Location: ./listagem-pet.php');
         }
 
@@ -200,33 +190,32 @@
             $mysql->execute();
             $state= $mysql->fetchColumn();
 
-            $fome = hungry($Dtime, $state);
-            $felicidade = happy($Dtime, $state);
-            $sono = sleep($Dtime, $state);
-            $saude = health($Dtime, $state);
+            $fome = $this->hungry($Dtime, $state);
+            $felicidade = $this->happy($Dtime, $state);
+            $sono = $this->sleep($Dtime, $state);
+            $saude = $this->health($Dtime, $state);
 
             $estado = 'normal';
 
-            if ($fome > 50){
+            if ($fome < 50){
                 $estado = 'fome';
             }
-            if($felicidade > 50){
+            if($felicidade < 50){
                 $estado = 'triste';                
             }
-            elseif(($felicidade > 90) && ($fome > 80) && ($sono > 80) && ($saude > 80)){
+            else if(($felicidade > 90) && ($fome > 80) && ($sono > 80) && ($saude > 80)){
                 $estado = 'feliz';
             }
-            if ($sono > 50){
+            if ($sono < 50){
                 $estado = 'cansado';                
             }
-            if ($saude > 20){
+            if ($saude <= 20){
                 $estado = 'doente';
             }
 
-            $queryState="UPDATE pet SET healthPet = $saude, happyPet = $felicidade, hunguerPer = $fome, sleepPet = $sono, statePet = $estado WHERE idPet = $idPet";
+            $queryState="UPDATE pet SET healthPet = $saude, happyPet = $felicidade, hungerPet = $fome, sleepPet = $sono, statePet = '$estado' WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($queryState);
             $mysql->execute();
-
         }
 
         public function hungry($Dtime, $state){

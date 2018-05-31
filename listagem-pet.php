@@ -19,6 +19,8 @@
             $petAtual = $pets->retPet($teste);
         else
             header('Location: ./criarPet.php');
+        
+        $pets->controleEstadosGerais($petAtual['idPet']);
     /**FIM LISTAR PETS DISPONÍVEIS */
 
     /** MATAR PET */
@@ -96,13 +98,20 @@
         <link rel="stylesheet" type="text/css" href="css/general.css">
         <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-
-
-        <!--
-            Fonte dos Gifs
-
-         -->
         </head>
+
+        <script type="text/javascript">
+            // $(function() {
+            //     setTime();
+            //     function setTime() {
+            //         // var date = new Date().getTime();
+            //         // var string = "Timestamp: "+date;
+            //         
+            //         setTimeout(setTime, 3000);
+            //         $('#tempoAtual').innerhHTML;
+            //     }
+            //     });
+        </script>
         
         <body style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
         <nav class="navbar navbar-dark bg-dark"> <!-- Menu --> 
@@ -114,7 +123,31 @@
                     <a class="btn btn-outline-danger" href="logout.php" role="button">Sair</a>
                 </div>
                     <h1 style="color: white;"> <?php echo $petAtual['nomePet']; ?></h1>
-            <!-- </div> -->
+                    <!-- <div id="time"></div>
+                        <script>
+                        function checkTime(i) {
+                            if (i < 10) {
+                                i = "0" + i;
+                            }
+                            return i;
+                        }
+
+                        function startTime() {
+                            var today = new Date();
+                            var h = today.getHours();
+                            var m = today.getMinutes();
+                            var s = today.getSeconds();
+                            // add a zero in front of numbers<10
+                            m = checkTime(m);
+                            s = checkTime(s);
+                            document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+                            t = setTimeout(function () {
+                                startTime()
+                            }, 500);
+                        }
+                        startTime();
+                        </script> -->
+                     <!-- </div> -->
         </div>
         </nav> <!-- Fim Menu -->
 
@@ -231,7 +264,7 @@
 
         <div class="container" style="margin-left: 5%;"> <!-- Área com dados do Pet -->
             <div align="center" style="width: 50%; margin-left: 25%;">
-                <table class="table" align="center" style="width: 80%; margin-top: 2%;">
+                <table id="tempoAtual" class="table" align="center" style="width: 80%; margin-top: 2%;">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">Happy</th>
