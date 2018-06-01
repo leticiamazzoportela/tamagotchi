@@ -20,7 +20,7 @@
         else
             header('Location: ./criarPet.php');
         
-        $pets->controleEstadosGerais($petAtual['idPet']);
+        //$pets->controleEstadosGerais($petAtual['idPet']);
     /**FIM LISTAR PETS DISPONÍVEIS */
 
     /** MATAR PET */
@@ -44,6 +44,10 @@
             }
         }
     /** FIM CONTROLE MINIGAME */
+
+    /** CONTROLE RANKING */
+        $listaRanking = $game->ranking();
+    /** FIM CONTROLE RANKING */
 
     /** CONTROLE ALIMENTAR */
         if(isset($_POST['petFome'])){
@@ -187,15 +191,39 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- <//?php foreach($resultado as $name){ ?>
-                                <form action="listagem-pet.php" method="post">
-                                    <input type="hidden" id="petAtual" name="petAtual" value="<//?=$name['idPet'];?>"></input>
-                                    <button type="submit" class="btn btn-primary">
-                                        <//?php echo $name['nomePet'];?>
-                                    </button>
-                                </form>
-                                <br><br>
-                        <//?php } ?> -->
+                        <table class="table" align="center"  style="text-align: center;">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Posição</th>
+                                    <th scope="col">ID Usuário</th>
+                                    <th scope="col">Pet</th>
+                                    <th scope="col">Minigame</th>
+                                    <!-- <th scope="col">Pontuação</th> -->
+                                </tr>
+                            </thead>
+                            <?php $i = 1; foreach($listaRanking as $item){ ?>
+                                <tbody>
+                                    <tr>
+                                        <th>    
+                                            <?php echo $i; ?>
+                                        </th>
+                                        <th>    
+                                            <?= $item['idUsuario']; ?> 
+                                        </th>
+                                        <th>    
+                                            <?=  $item['nomePet']; ?> 
+                                        </th>
+                                        <th>    
+                                            <?=  $item['nomeMinigame']; ?> 
+                                        </th>
+                                        <!-- <th>    
+                                            <//?=  $item['pontuacao']; ?> 
+                                        </th> -->
+                                    </tr>
+                                </tbody>
+                                <?php $i++;} ?>
+                        </table>
+                        <br><br>
                     </div>
                 </div>
             </div>

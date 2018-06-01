@@ -21,7 +21,7 @@
         }
 
         public function criaMinigame($petAtual){
-            $ppt="INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Pedra - Papel - Tesoura', 0, '$petAtual')";
+            $ppt="INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Pedra - Papel - Tesoura', 0, $petAtual)";
             // $forca="INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Forca', 0, '$idPet')";
             $mysql=$this->mysql->prepare($ppt);
             // $mysql=$this->mysql->prepare($forca);
@@ -47,8 +47,7 @@
             $mysql->execute();
             return $mysql->fetch(PDO::FETCH_ASSOC);
         }
-
-        
+   
         public function mostrarJogo($nomeJogo, $item = null){
             if($nomeJogo == 'pedra-papel-tesoura'){
                 $itens = array('pedra', 'papel', 'tesoura');
@@ -114,7 +113,11 @@
         }
 
         public function ranking(){
-            
+            ///$id = $_SESSION["id_usuario"];
+            $sql = "SELECT DISTINCT pet.idUsuario, pet.nomePet, minigames.nomeMinigame FROM pet, minigames ORDER BY minigames.pontuacao DESC";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            return $mysql->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
