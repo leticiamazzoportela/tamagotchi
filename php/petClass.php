@@ -284,6 +284,8 @@
                 $mysql=$this->mysql->prepare($aparencia);
                 $mysql->execute();
             }
+
+            $_SESSION["tempo"] = time();
         }
 
         public function hungry($Dtime, $state){
