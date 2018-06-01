@@ -236,6 +236,7 @@
         public function controleEstadosGerais($idPet){
             $tempo = time();
             $Dtime = $tempo - $_SESSION["tempo"];
+
             $sql = "SELECT statePet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
@@ -289,6 +290,11 @@
         }
 
         public function hungry($Dtime, $state){
+            $sql = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $hunger= $mysql->fetchColumn();
+
             if ($state == 'normal'){
                 $fome = $Dtime/120;
             }
@@ -307,10 +313,16 @@
             if ($state == 'doente'){
                 $fome = $Dtime/120;
             }
-            return $fome;
+            $hunger = $hunger - $fome;
+            return $hunger;
         }
 
         public function happy($Dtime, $state){
+            $sql = "SELECT happyPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $happy= $mysql->fetchColumn();
+
             if ($state == 'normal'){
                 $felicidade = $Dtime/180;
             }
@@ -329,10 +341,16 @@
             if ($state == 'doente'){
                 $felicidade = $Dtime/80;
             }
-            return $felicidade;
+            $happy = $happy - $felicidade;
+            return $happy;
         }
 
         public function sleep($Dtime, $state){
+            $sql = "SELECT sleepPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $sleep= $mysql->fetchColumn();
+
             if ($state == 'normal'){
                 $sono = $Dtime/250;
             }
@@ -351,10 +369,16 @@
             if ($state == 'doente'){
                 $sono = $Dtime/70;
             }
-            return $sono;
+            $sleep = $sleep - $sono;
+            return $sleep;
         }
 
         public function health($Dtime, $state){
+            $sql = "SELECT healthPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
+            $mysql->execute();
+            $health= $mysql->fetchColumn();
+
             if ($state == 'normal'){
                 $saude = $Dtime/250;
             }
@@ -373,7 +397,8 @@
             if ($state == 'doente'){
                 $saude = $Dtime/60;
             }
-            return $saude;
+            $health = $health - $saude;
+            return $health;
         }
 
         public function curar($idPet){
