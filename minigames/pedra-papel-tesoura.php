@@ -54,15 +54,9 @@
                         <h1>Pedra - Papel - Tesoura</h1>
                         <br />
                         <form action="pedra-papel-tesoura.php?idP=<?= $idP?>" method="post">
-                            <input type="submit" id="pedra" name="pedra" value="pedra">
-                                <!-- <img src="https://vignette.wikia.nocookie.net/sonicboombrasilbr/images/c/c7/Pedra_da_justi%C3%A7a.png/revision/latest?cb=20150905020413&path-prefix=pt-br" width="135" height="135" alt="pedra"></img> -->
-                            </input>
-                            <input type="submit" id="papel" name="papel" value="papel" style="margin-left: 2%;">
-                                <!-- <img src="https://78.media.tumblr.com/cfc5ea8cc7b3708950a37c93b25b6d34/tumblr_p4fbotLnzJ1uke6wjo1_1280.png" width="135" height="135" alt="papel"></img> -->
-                            </input>
-                            <input type="submit" id="tesoura" name="tesoura" value="tesoura" style="margin-left: 2%;">
-                                <!-- <img src="http://worldartsme.com/images/scissor-cartoon-clipart-1.jpg" width="135" height="140" alt="tesoura"></img> -->
-                            </input>
+                                <input name="pedra" type="image" src="https://vignette.wikia.nocookie.net/sonicboombrasilbr/images/c/c7/Pedra_da_justi%C3%A7a.png/revision/latest?cb=20150905020413&path-prefix=pt-br" width="135" height="135" alt="pedra" value="pedra"></input>
+                                <input name="papel" type="image" src="https://78.media.tumblr.com/cfc5ea8cc7b3708950a37c93b25b6d34/tumblr_p4fbotLnzJ1uke6wjo1_1280.png" width="135" height="135" alt="papel" value="papel"></input>
+                                <input name="tesoura" type="image" src="http://worldartsme.com/images/scissor-cartoon-clipart-1.jpg" width="135" height="140" alt="tesoura" value="tesoura"></input>
                         </form>
                         <br><br>
                     </div>

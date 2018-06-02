@@ -21,15 +21,13 @@
         }
 
         public function criaMinigame($petAtual){
-            $ppt="INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Pedra - Papel - Tesoura', 0, $petAtual)";
-            // $forca="INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Forca', 0, '$idPet')";
-            $mysql=$this->mysql->prepare($ppt);
-            // $mysql=$this->mysql->prepare($forca);
-            try{
-                $mysql->execute();
-            }catch(PDOException $e){
-                echo $e->getMessage();
-            }
+            $ppt = "INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Pedra - Papel - Tesoura', 0, $petAtual)";
+            $mysql = $this->mysql->prepare($ppt);
+            $mysql->execute();
+            
+            $velha = "INSERT INTO minigames (nomeMinigame, pontuacao, idPet) VALUES ('Jogo da Velha', 0, $petAtual)";
+            $mysql = $this->mysql->prepare($velha);
+            $mysql->execute();
         }
 
         public function listarMinigames($petAtual){
@@ -68,17 +66,43 @@
             }
         }
 
-        protected function calcPontuacao($idPet){
-            $sql = "SELECT pontuacao FROM minigames WHERE idPet = $idPet";
+        public function animar($idPet){
+            $pontos = "SELECT SUM(pontuacao) FROM minigames WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($pontos);
+            $mysql->execute();
+            $happy= $mysql->fetchColumn();
+
+            $hp = "SELECT happyPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($hp);
+            $mysql->execute();
+            $antigo= $mysql->fetchColumn();
+
+            $antigo = $antigo + $happy*2;
+
+            $query = "UPDATE pet SET happyPet = $antigo WHERE idPet = $idPet";
+            $mysql=$this->mysql->prepare($query);
+            $mysql->execute();
+
+            if($antigo > 50){
+                $query = "UPDATE pet SET statePet = 'feliz' WHERE idPet = $idPet";
+                $mysql=$this->mysql->prepare($query);
+                $mysql->execute();
+            }
+        }
+
+        protected function calcPontuacao($minigame, $idPet){
+            $sql = "SELECT pontuacao FROM minigames WHERE idPet = $idPet AND nomeMinigame = '$minigame'";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $antigo = $mysql->fetchColumn();
 
             $novaPont = $antigo+1;
 
-            $ppt="UPDATE minigames SET pontuacao = '$novaPont' WHERE idPet = $idPet";
+            $ppt="UPDATE minigames SET pontuacao = $novaPont WHERE idPet = $idPet AND nomeMinigame = '$minigame'";
             $mysql=$this->mysql->prepare($ppt);
             $mysql->execute();
+
+            $this->animar($idPet);
         }
         
         public function jogar($item, $idPet){
@@ -92,7 +116,7 @@
                 //Tesoura > Papel
                 //Papel > Pedra
                 if(($user_item == 'pedra' && $comp_item == 'tesoura') || ($user_item == 'tesoura' && $comp_item == 'papel') || ($user_item == 'papel' && $comp_item == 'pedra')){
-                    $this->calcPontuacao($idPet);
+                    $this->calcPontuacao('Pedra - Papel - Tesoura', $idPet);
                    echo "<script type='text/javascript'>alert('Você: $user_item \\nComputador: $comp_item \\nVocê venceu!');javascript:window.location='pedra-papel-tesoura.php?idP=$idPet';</script>";
                 }
                 else if ($user_item == $comp_item){
@@ -110,6 +134,68 @@
             //else{
               //  echo $this->mostrarJogo('pedra-papel-tesoura');
             //}
+        }
+
+        public function jogarVelha($box, $idPet){
+            $campeao = 'n';
+
+            $jogada = 0;
+            for($j = 0; $j <= 8; $j++){
+                if($_POST["box".$j] != 'x' && $_POST["box".$j] != '' && $_POST["box".$j] != 'o' || strlen($_POST["box".$j]) > 1)
+                    echo "<script type='text/javascript'>alert('Operação inválida!');</script>";
+                else{
+                    $box[$j] = $_POST["box".$j];
+                        if($box[$j] != '')
+                            $jogada++;
+                }
+            }
+
+            //Daqui em diante as posições são preenchidas conforme o usuario joga, o computador é a bolinha.
+            if($jogada == 1 || $jogada == 3 || $jogada == 5 || $jogada == 7 || $jogada == 9){
+                $blank = 0;
+                for($i = 0; $i <= 8; $i++){
+                    if($box[$i] == ''){
+                        $blank = 1;
+                    }
+                }
+                if($blank == 1){
+                    $i = rand() % 8;
+                    while($box[$i] != ''){
+                        $i = rand() % 8;
+                    }
+                    $box[$i] = 'o';
+                }
+            }
+            else
+                echo "<script type='text/javascript'>alert('É a sua vez de jogar!');</script>";
+
+            if($box[0] == 'x' && $box[1] == 'x' && $box[2] == 'x' ||
+                $box[3] == 'x' && $box[4] == 'x' && $box[5] == 'x' ||
+                $box[6] == 'x' && $box[7] == 'x' && $box[8] == 'x' ||
+                $box[0] == 'x' && $box[4] == 'x' && $box[8] == 'x' ||
+                $box[2] == 'x' && $box[4] == 'x' && $box[6] == 'x' ||
+                $box[0] == 'x' && $box[3] == 'x' && $box[6] == 'x' ||
+                $box[1] == 'x' && $box[4] == 'x' && $box[7] == 'x' ||
+                $box[2] == 'x' && $box[5] == 'x' && $box[8] == 'x'){
+                    echo "<script type='text/javascript'>alert('Você venceu!');javascript:window.location='jogo-da-velha.php?idP=$idPet';</script>";
+                    $campeao = 'x';
+                    $this->calcPontuacao('Jogo da Velha', $idPet);
+            }
+            else if($box[0] == 'o' && $box[1] == 'o' && $box[2] == 'o' ||
+                    $box[3] == 'o' && $box[4] == 'o' && $box[5] == 'o' ||
+                    $box[6] == 'o' && $box[7] == 'o' && $box[8] == 'o' ||
+                    $box[0] == 'o' && $box[4] == 'o' && $box[8] == 'o' ||
+                    $box[2] == 'o' && $box[4] == 'o' && $box[6] == 'o' ||
+                    $box[0] == 'o' && $box[3] == 'o' && $box[6] == 'o' ||
+                    $box[1] == 'o' && $box[4] == 'o' && $box[7] == 'o' ||
+                    $box[2] == 'o' && $box[5] == 'o' && $box[8] == 'o'){
+                        echo "<script type='text/javascript'>alert('O computador venceu!');javascript:window.location='jogo-da-velha.php?idP=$idPet';</script>";
+                        $campeao = 'o';
+            }
+            else if($campeao == 'n' && $jogada >= 8)
+                echo "<script type='text/javascript'>alert('Empate!');javascript:window.location='jogo-da-velha.php?idP=$idPet';</script>";
+
+            return $box;
         }
 
         public function ranking(){

@@ -102,18 +102,15 @@
         }
 
         public function alimentar($tipoComida, $idPet){
-            //ARRUMAR ESSA FUNÇÃO QUANDO ARRUMAR O TEMPO, PRA NÃO DAR CONFLITO DE ESTADO
-            //DÁ PRA CONSULTAR MAIS DE UMA COISA AO MESMO TEMPO COM FETCHCOLUMN
-            //FUNÇÃO DE SUJEIRA FAZER COM O TEMPO
             $sql = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $fomeAntiga = $mysql->fetchColumn();
 
-            $age = "SELECT idade FROM pet WHERE idPet = $idPet";
-            $mysql = $this->mysql->prepare($age);
+            $happy = "SELECT happyPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($happy);
             $mysql->execute();
-            $idade = $mysql->fetchColumn();
+            $felicidade = $mysql->fetchColumn();
 
             if($tipoComida == 'Coelho'){
                 if($fomeAntiga <= 90)
@@ -156,7 +153,7 @@
                 else
                     $doenteAtual = 0;
 
-                $queryDoente="UPDATE pet SET healthPet = '$doenteAtual' WHERE idPet = $idPet";
+                $queryDoente="UPDATE pet SET healthPet = $doenteAtual WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($queryDoente);
                 $mysql->execute();
 
@@ -165,42 +162,26 @@
                     $mysql=$this->mysql->prepare($qDoente);
                     $mysql->execute();
                 
-                    if($idade >= 4){
-                        $aparencia = "UPDATE pet SET imagem = 'tails-triste.gif' WHERE idPet = $idPet";
-                        $mysql=$this->mysql->prepare($aparencia);
-                        $mysql->execute();
-                    }
                 }
             }
             
-            $query="UPDATE pet SET hungerPet = '$fome' WHERE idPet = $idPet";
+            $query="UPDATE pet SET hungerPet = $fome WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($query);
             $mysql->execute();
 
-            if($fome >= 50 && $fome < 90){
-                $qfome="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($qfome);
-                $mysql->execute();
-
-                if($idade >= 4){
-                    $aparencia = "UPDATE pet SET imagem = 'tails-normal.gif' WHERE idPet = $idPet";
-                    $mysql=$this->mysql->prepare($aparencia);
-                    $mysql->execute();
-                }
-            }
-            else if($fome >= 90){
-                $qfome="UPDATE pet SET statePet = 'feliz' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($qfome);
-                $mysql->execute();
-
-                if($idade >= 4){
-                    $aparencia = "UPDATE pet SET imagem = 'tails-feliz.gif' WHERE idPet = $idPet";
-                    $mysql=$this->mysql->prepare($aparencia);
-                    $mysql->execute();
-                }
-            }
+            // if($fome >= 50 && $fome < 90){
+            //     $qfome="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";
+            //     $mysql=$this->mysql->prepare($qfome);
+            //     $mysql->execute();
+            // }
+            // else if($fome >= 90 && $felicidade >= 50){
+            //     $qfome="UPDATE pet SET statePet = 'feliz' WHERE idPet = $idPet";
+            //     $mysql=$this->mysql->prepare($qfome);
+            //     $mysql->execute();
+            // }
 
             header('Location: ./listagem-pet.php');
+            $this->controleEstadosGerais($idPet);
         }
 
         public function banhar($idPet){
@@ -209,27 +190,32 @@
             $mysql->execute();
             $estado = $mysql->fetchColumn();
 
-            $age = "SELECT idade FROM pet WHERE idPet = $idPet";
-            $mysql = $this->mysql->prepare($age);
+            $sql = "SELECT healthPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
-            $idade = $mysql->fetchColumn();
+            $hp = $mysql->fetchColumn();
+
+
+            $cons = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($cons);
+            $mysql->execute();
+            $c = $mysql->fetchColumn();
+
+            $novoHp = $hp + 5;
+            $novoC = $c - 2;
+
 
             if($estado == 'sujo'){
-                $query="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";
+                $query="UPDATE pet SET statePet = 'normal', healthPet = $novoHp, hungerPet = $novoC WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($query);
                 $mysql->execute();
-
-                if($idade >= 4){
-                    $aparencia = "UPDATE pet SET imagem = 'tails-normal.gif' WHERE idPet = $idPet";
-                    $mysql=$this->mysql->prepare($aparencia);
-                    $mysql->execute();
-                }
-                
                 header('Location: ./listagem-pet.php');
+                $this->controleEstadosGerais($idPet);
             }
             else{
                 echo "<script type='text/javascript'>alert('Eeei! Já estou limpo!');javascript:window.location='listagem-pet.php';</script>"; 
             }
+
             
         }
 
@@ -242,15 +228,11 @@
             $mysql->execute();
             $state= $mysql->fetchColumn();
 
-            $age = "SELECT idade FROM pet WHERE idPet = $idPet";
-            $mysql = $this->mysql->prepare($age);
-            $mysql->execute();
-            $idade = $mysql->fetchColumn();
-
-            $fome = $this->hungry($Dtime, $state);
-            $felicidade = $this->happy($Dtime, $state);
-            $sono = $this->sleep($Dtime, $state);
-            $saude = $this->health($Dtime, $state);
+            $fome = $this->hungry($Dtime, $state, $idPet);
+            $felicidade = $this->happy($Dtime, $state, $idPet);
+            $sono = $this->sleep($Dtime, $state, $idPet);
+            $saude = $this->health($Dtime, $state, $idPet);
+            $idade = $this->age($Dtime, $idPet);
 
             $estado = 'normal';
             $src = 'tails-normal.gif';
@@ -259,27 +241,31 @@
                 $estado = 'fome';
                 $src = 'tails-bravo.gif';
             }
-            if($felicidade < 50){
+            if($fome >= 100){
+                $estado = 'sujo';
+                $src = 'tails-sujo.gif';
+            }
+            if($felicidade < 30){
                 $estado = 'triste';
                 $src = 'tails-triste.gif';                
             }
-            else if(($felicidade > 90) && ($fome > 80) && ($sono > 80) && ($saude > 80)){
+            else if(($felicidade > 50) && ($fome >= 80) && ($sono > 80) && ($saude > 80)){
                 $estado = 'feliz';
                 $src = 'tails-feliz.gif';
             }
             if ($sono < 50){
                 $estado = 'cansado'; 
-                $src = 'tails-dormir.gif';               
+                $src = 'tails-triste.gif';               
             }
             if ($saude <= 20){
                 $estado = 'doente';
-                $src = 'tails-triste.gif';
+                $src = 'tails-doente.gif';
             }
 
-            $queryState="UPDATE pet SET healthPet = $saude, happyPet = $felicidade, hungerPet = $fome, sleepPet = $sono, statePet = '$estado' WHERE idPet = $idPet";
+            $queryState="UPDATE pet SET healthPet = $saude, happyPet = $felicidade, hungerPet = $fome, sleepPet = $sono, statePet = '$estado', idade = $idade WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($queryState);
             $mysql->execute();
-
+            echo $estado;
             if($idade >= 4){
                 $aparencia = "UPDATE pet SET imagem = '$src' WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($aparencia);
@@ -287,43 +273,85 @@
             }
 
             $_SESSION["tempo"] = time();
+
+            //header("Location: listagem-pet.php");
         }
 
-        public function hungry($Dtime, $state){
+        public function age($Dtime, $idPet){
+            $age = "SELECT idade FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($age);
+            $mysql->execute();
+            $idade = $mysql->fetchColumn();
+
+            $state = "SELECT statePet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($state);
+            $mysql->execute();
+            $status = $mysql->fetchColumn();
+
+            $id = $Dtime/10; //por enquanto a cada 1min, depois a cada 10min
+            $idade = $idade + $id;
+
+            if($idade >= 8)
+                $idade = 8;
+
+            // if($idade >= 4){
+            //     if($status == 'fome'){
+            //         $src = 'tails-bravo.gif';
+            //     }
+            //     else if($status == 'cansado' || $status == 'triste'){
+            //         $src = 'tails-triste.gif';
+            //     }
+            //     else if($status == 'sujo'){
+            //         $src = 'tails-sujo.gif';
+            //     }
+            //     else if($status == 'feliz'){
+            //         $src = 'tails-feliz.gif';
+            //     }
+            //     else if($status == 'normal'){
+            //         $src = 'tails-normal.gif';
+            //     }
+            //     else if($status == 'doente'){
+            //         $src = 'tails-doente.gif';
+            //     }
+
+            //     $aparencia = "UPDATE pet SET imagem = '$src' WHERE idPet = $idPet";
+            //     $mysql=$this->mysql->prepare($aparencia);
+            //     $mysql->execute();
+            // }
+
+            return $idade;
+        }
+
+        public function hungry($Dtime, $state, $idPet){
             $sql = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $hunger= $mysql->fetchColumn();
 
-            if ($state == 'normal'){
+            if ($state == 'normal' || $state == 'triste' || $state == 'doente'){
                 $fome = $Dtime/120;
             }
             if ($state == 'feliz'){
                 $fome = $Dtime/180;
             }
-            if ($state == 'cansado'){
+            if ($state == 'cansado' || $state == 'sujo'){
                 $fome = $Dtime/100;
-            }
-            if ($state == 'triste'){
-                $fome = $Dtime/120;
             }
             if ($state == 'fome'){
                 $fome = $Dtime/60;
             }
-            if ($state == 'doente'){
-                $fome = $Dtime/120;
-            }
+    
             $hunger = $hunger - $fome;
             return $hunger;
         }
 
-        public function happy($Dtime, $state){
+        public function happy($Dtime, $state, $idPet){
             $sql = "SELECT happyPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $happy= $mysql->fetchColumn();
 
-            if ($state == 'normal'){
+            if ($state == 'normal' || $state == 'sujo'){
                 $felicidade = $Dtime/180;
             }
             if ($state == 'feliz'){
@@ -341,17 +369,18 @@
             if ($state == 'doente'){
                 $felicidade = $Dtime/80;
             }
+        
             $happy = $happy - $felicidade;
             return $happy;
         }
 
-        public function sleep($Dtime, $state){
+        public function sleep($Dtime, $state, $idPet){
             $sql = "SELECT sleepPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $sleep= $mysql->fetchColumn();
 
-            if ($state == 'normal'){
+            if ($state == 'normal' || $state == 'sujo'){
                 $sono = $Dtime/250;
             }
             if ($state == 'feliz'){
@@ -370,16 +399,17 @@
                 $sono = $Dtime/70;
             }
             $sleep = $sleep - $sono;
+
             return $sleep;
         }
 
-        public function health($Dtime, $state){
+        public function health($Dtime, $state, $idPet){
             $sql = "SELECT healthPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $health= $mysql->fetchColumn();
 
-            if ($state == 'normal'){
+            if ($state == 'normal' || $state == 'sujo'){
                 $saude = $Dtime/250;
             }
             if ($state == 'feliz'){
@@ -411,37 +441,19 @@
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $estado = $mysql->fetchColumn();
-            error_log($estado);
-
-            $age = "SELECT idade FROM pet WHERE idPet = $idPet";
-            $mysql = $this->mysql->prepare($age);
-            $mysql->execute();
-            $idade = $mysql->fetchColumn();
-            
 
             if($statusDoente <= 20){
                 $novoHealth = $statusDoente + 10;
                 if($novoHealth > 20){
                     $novoStatus = 'normal';
-                    if($idade >= 4){
-                        $aparencia = "UPDATE pet SET imagem = 'tails-normal.gif' WHERE idPet = $idPet";
-                        $mysql=$this->mysql->prepare($aparencia);
-                        $mysql->execute();
-                    }
                 }
-                else
-                    $novoStatus = 'doente';
+                // else
+                //     $novoStatus = 'doente';
         
             }
             else if($estado != 'doente'){
                 $novoHealth = 20;
                 $novoStatus = 'doente';
-
-                if($idade >= 4){
-                    $aparencia = "UPDATE pet SET imagem = 'tails-triste.gif' WHERE idPet = $idPet";
-                    $mysql=$this->mysql->prepare($aparencia);
-                    $mysql->execute();
-                }
             }
             else{
                 $novoHealth = $statusDoente;
@@ -453,6 +465,7 @@
             $mysql->execute();
 
             header('Location: ./listagem-pet.php');
+            $this->controleEstadosGerais($idPet);
 
             
         }
@@ -463,25 +476,24 @@
             $mysql->execute();
             $estado = $mysql->fetchColumn();
 
+            $cans = "SELECT sleepPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($cans);
+            $mysql->execute();
+            $sleep = $mysql->fetchColumn();
+
             $age = "SELECT idade FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($age);
             $mysql->execute();
             $idade = $mysql->fetchColumn();
 
             if($estado == 'cansado'){
-                //passa um tempo e aí atualiza, antes tem que colocar a imagem de cansado
-                $query="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";
+                $query="UPDATE pet SET statePet = 'normal', sleepPet = 80 WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($query);
                 $mysql->execute();
-
-                if($idade >= 4){
-                    $aparencia = "UPDATE pet SET imagem = 'tails-normal.gif' WHERE idPet = $idPet";
-                    $mysql=$this->mysql->prepare($aparencia);
-                    $mysql->execute();
-                }
             }
             
-            header('Location: ./listagem-pet.php'); 
+            header('Location: ./listagem-pet.php');
+            $this->controleEstadosGerais($idPet); 
         }
 
     }

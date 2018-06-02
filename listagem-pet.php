@@ -19,8 +19,10 @@
             $petAtual = $pets->retPet($teste);
         else
             header('Location: ./criarPet.php');
-        
-        //$pets->controleEstadosGerais($petAtual['idPet']);
+    
+
+          //$_SESSION["tempo"] = time();
+          $pets->controleEstadosGerais($petAtual['idPet']);
     /**FIM LISTAR PETS DISPONÍVEIS */
 
     /** MATAR PET */
@@ -41,6 +43,9 @@
             //$minigameAtual = $game->retGame($idP, $idM);
             if($idM == 'Pedra - Papel - Tesoura'){
                 header("Location: minigames/pedra-papel-tesoura.php?idP=$idP");
+            }
+            else if($idM == 'Jogo da Velha'){
+                header("Location: minigames/jogo-da-velha.php?idP=$idP");
             }
         }
     /** FIM CONTROLE MINIGAME */
@@ -102,6 +107,9 @@
         <link rel="stylesheet" type="text/css" href="css/general.css">
         <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+ 
+     <!-- <meta http-equiv="refresh" content="5"> -->
+
         </head>
 
         <script type="text/javascript">
@@ -169,9 +177,15 @@
                         <?php foreach($resultado as $name){ ?>
                                 <form action="listagem-pet.php" method="post">
                                     <input type="hidden" id="petAtual" name="petAtual" value="<?=$name['idPet'];?>"></input>
-                                    <button type="submit" class="btn btn-primary">
-                                        <?php echo $name['nomePet'];?>
-                                    </button>
+                                    <?php if($name['idPet'] % 2 == 0){?>
+                                        <button type="submit" class="btn btn-primary">
+                                            <?php echo $name['nomePet'];?>
+                                        </button>
+                                    <?php } else{ ?>
+                                        <button type="submit" class="btn btn-info">
+                                            <?php echo $name['nomePet'];?>
+                                        </button>
+                                    <?php }?>
                                 </form>
                                 <br><br>
                         <?php } ?>
@@ -248,10 +262,15 @@
                                 <form action="listagem-pet.php" method="post">
                                     <input type="hidden" id="petM" name="petM" value="<?=$minigame['idPet']?>"></input>
                                     <input type="hidden" id="minigameAtual" name="minigameAtual" value="<?=$minigame['nomeMinigame']?>"</input>
-                                    <button type="submit" class="btn btn-success">
-                                        <?php echo $minigame['nomeMinigame'];?>
-                                    </button>
-                                    <a href=></a>
+                                    <?php if($idM == 'Jogo da Velha'){?>
+                                        <button type="submit" class="btn btn-success">
+                                            <?php echo $minigame['nomeMinigame'];?>
+                                        </button>
+                                    <?php } else {?>
+                                        <button type="submit" class="btn btn-danger">
+                                            <?php echo $minigame['nomeMinigame'];?>
+                                        </button>
+                                    <?php }?>
                                 </form>
                                 <br><br>
                         <?php } ?>
