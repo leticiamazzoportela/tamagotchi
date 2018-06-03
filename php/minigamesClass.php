@@ -77,9 +77,15 @@
             $mysql->execute();
             $antigo= $mysql->fetchColumn();
 
-            $antigo = $antigo + $happy*2;
+            $hunger = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($hp);
+            $mysql->execute();
+            $antigoHunger = $mysql->fetchColumn();
 
-            $query = "UPDATE pet SET happyPet = $antigo WHERE idPet = $idPet";
+            $antigo = $antigo + $happy*2;
+            $antigoHunger = $antigoHunger - $happy*2;
+
+            $query = "UPDATE pet SET happyPet = $antigo, hungerPet = $antigoHunger WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($query);
             $mysql->execute();
 

@@ -32,11 +32,24 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
         </head>
         
+        <script type="text/javascript">
+            var btnPlim = new Audio(); 
+            btnPlim.src = "../songs/plim.wav";
+
+            var btnNS = new Audio(); 
+            btnNS.src = "../songs/novo.wav";
+        </script>
+
+        <audio id="bg" autoplay="autoplay" loop="loop">
+            <source src="../songs/bg.mp3" type="audio/mp3" />
+            seu navegador não suporta HTML5
+        </audio>
+
         <body style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
             <div class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                <a class="navbar-brand" href="../listagem-pet.php">Voltar</a>
+                <a onmousedown="btnNS.play()" class="navbar-brand" href="../listagem-pet.php">Voltar</a>
                 </div>
             </div>
             </div>
@@ -65,7 +78,7 @@
                                 }
                             ?>
                             <br>
-                            <button name="play" class="btn btn-lg btn-outline-success rounded-circle" type="submit">
+                            <button onmousedown="btnPlim.play()" name="play" class="btn btn-lg btn-outline-success rounded-circle" type="submit">
                                 <i class="fas fa-play"></i>
                             </button>
                         </form>

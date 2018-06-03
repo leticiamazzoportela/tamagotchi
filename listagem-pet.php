@@ -23,6 +23,7 @@
 
           //$_SESSION["tempo"] = time();
           $pets->controleEstadosGerais($petAtual['idPet']);
+          $pets->reiniciarPet($petAtual['idPet']);
     /**FIM LISTAR PETS DISPONÍVEIS */
 
     /** MATAR PET */
@@ -108,33 +109,67 @@
         <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
  
-     <!-- <meta http-equiv="refresh" content="5"> -->
+     <!-- <meta http-equiv="refresh" content="60"> -->
 
         </head>
 
+        <!-- <audio id="bg" autoplay="autoplay" loop="loop">
+            <source src="songs/bg.mp3" type="audio/mp3" />
+            seu navegador não suporta HTML5
+        </audio> -->
+
         <script type="text/javascript">
-            // $(function() {
-            //     setTime();
-            //     function setTime() {
-            //         // var date = new Date().getTime();
-            //         // var string = "Timestamp: "+date;
-            //         
-            //         setTimeout(setTime, 3000);
-            //         $('#tempoAtual').innerhHTML;
-            //     }
-            //     });
+            var btnsMenu = new Audio();
+            var btnNS = new Audio(); 
+            var btnUp = new Audio();
+            var btnBanho = new Audio();
+            var btnMorte = new Audio();
+            var btnPlayBg = new Audio();
+
+            btnsMenu.src = "songs/options.wav"; //Modais
+            btnNS.src = "songs/novo.wav"; //Novo Pet, Sair, seleciona opcoes modais: trocar pet e minigame
+            btnUp.src = "songs/curaComida.wav"; //Comida (quando seleciona qual a comida)
+            btnBanho.src = "songs/banho.wav"; //banho
+            btnMorte.src = "songs/morte.wav";
+            btnPlayBg.src = "songs/bg.mp3";
+            //var btnPlayBg = document.getElementById("bg");
+
+            btnPlayBg.autoplay = true;
+            function tempo(){
+                setInterval(function(){
+                    window.location.reload();
+                    // if(btnPlayBg.played)
+                    //     btnPlayBg.pause();
+
+                    // if(btnPlayBg.paused)
+                    //     btnPlayBg.play();
+                    },60000);
+            }
+            
+
+
         </script>
         
-        <body style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
+        <body onload="tempo()" id="body" style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
         <nav class="navbar navbar-dark bg-dark"> <!-- Menu --> 
             <!-- <div class="container"> -->
                 <div class="navbar-header">
-                    <a class="btn btn-outline-success menu-nav" href="criarPet.php" role="button">Novo Pet</a>
-                    <a class="btn btn-outline-primary" href="#lista-pets" data-toggle="modal" role="button">Trocar Pet</a>
-                    <a class="btn btn-outline-warning" href="#ranking" data-toggle="modal" role="button">Ranking</a>
-                    <a class="btn btn-outline-danger" href="logout.php" role="button">Sair</a>
+                    <a onmousedown="btnNS.play()" class="btn btn-outline-success menu-nav" href="criarPet.php" role="button">Novo Pet</a>
+                    <a onmousedown="btnsMenu.play()" class="btn btn-outline-primary" href="#lista-pets" data-toggle="modal" role="button">Trocar Pet</a>
+                    <a onmousedown="btnsMenu.play()" class="btn btn-outline-warning" href="#ranking" data-toggle="modal" role="button">Ranking</a>
+                    <a onmousedown="btnNS.play()" class="btn btn-outline-danger" href="logout.php" role="button">Sair</a>
                 </div>
                     <h1 style="color: white;"> <?php echo $petAtual['nomePet']; ?></h1>
+                    <h3 style="color: white;">
+                        Música:
+                        <!-- btn btn-sm btn-info rounded-circle -->
+                        <button onmousedown="btnPlayBg.play()" name="playM" class="btn btn-sm btn-primary rounded-circle" type="button">
+                                <i class="fas fa-play"></i>
+                        </button>
+                        <button onmousedown="btnPlayBg.pause()" name="playM" class="btn btn-sm btn-light rounded-circle" type="button">
+                                <i class="fas fa-pause"></i>
+                        </button>
+                    </h3>
                     <!-- <div id="time"></div>
                         <script>
                         function checkTime(i) {
@@ -178,11 +213,11 @@
                                 <form action="listagem-pet.php" method="post">
                                     <input type="hidden" id="petAtual" name="petAtual" value="<?=$name['idPet'];?>"></input>
                                     <?php if($name['idPet'] % 2 == 0){?>
-                                        <button type="submit" class="btn btn-primary">
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-primary">
                                             <?php echo $name['nomePet'];?>
                                         </button>
                                     <?php } else{ ?>
-                                        <button type="submit" class="btn btn-info">
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-info">
                                             <?php echo $name['nomePet'];?>
                                         </button>
                                     <?php }?>
@@ -263,11 +298,11 @@
                                     <input type="hidden" id="petM" name="petM" value="<?=$minigame['idPet']?>"></input>
                                     <input type="hidden" id="minigameAtual" name="minigameAtual" value="<?=$minigame['nomeMinigame']?>"</input>
                                     <?php if($idM == 'Jogo da Velha'){?>
-                                        <button type="submit" class="btn btn-success">
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-success">
                                             <?php echo $minigame['nomeMinigame'];?>
                                         </button>
                                     <?php } else {?>
-                                        <button type="submit" class="btn btn-danger">
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-danger">
                                             <?php echo $minigame['nomeMinigame'];?>
                                         </button>
                                     <?php }?>
@@ -291,12 +326,12 @@
                     </div>
                     <div class="modal-body">
                         <form action="listagem-pet.php" method="post">
-                            <input type="submit" class="btn btn-danger" id="Coelho" name="Coelho" value="Coelho"></input>
-                            <input type="submit" class="btn btn-danger" id="Rato" name="Rato" value="Rato"></input>
-                            <input type="submit" class="btn btn-danger" id="Pássaro" name="Pássaro" value="Pássaro"></input>
-                            <input type="submit" class="btn btn-danger" id="Fruta" name="Fruta" value="Fruta"></input>
-                            <input type="submit" class="btn btn-danger" id="Inseto" name="Inseto" value="Inseto"></input>
-                            <input type="hidden" id="petFome" name="petFome" value="<?=$petAtual['idPet'];?>"></input>
+                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Coelho" name="Coelho" value="Coelho"></input>
+                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Rato" name="Rato" value="Rato"></input>
+                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Pássaro" name="Pássaro" value="Pássaro"></input>
+                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Fruta" name="Fruta" value="Fruta"></input>
+                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Inseto" name="Inseto" value="Inseto"></input>
+                            <input onmousedown="btnUp.play()" type="hidden" id="petFome" name="petFome" value="<?=$petAtual['idPet'];?>"></input>
                         </form>
                         <br><br>
                     </div>
@@ -308,6 +343,10 @@
         </div> <!-- Fim Modal Alimentar -->
 
         <br>
+
+        <!-- <audio controls="autoplay" height="50px" width="100px" type="hidden">
+        <source src="songs/bg.mp3" type="audio/mpeg" />
+        </audio> -->
 
         <div class="container" style="margin-left: 5%;"> <!-- Área com dados do Pet -->
             <div align="center" style="width: 50%; margin-left: 25%;">
@@ -391,46 +430,63 @@
                                             })
                                         })
                                     </script> -->
-
-                                    <a id="alimentar" class="btn btn-outline-danger rounded-circle" role="button" href="#lista-comidas" data-toggle="modal">
-                                        <i class="fas fa-utensils"></i>
-                                    </a>
+                                    <?php if($petAtual['statePet'] == 'dormindo'){ ?>
+                                        <a disabled class="btn btn-outline-danger rounded-circle disabled" role="button">
+                                            <i class="fas fa-utensils"></i>
+                                        </a>
+                                    <?php } else{ ?>
+                                        <a onmousedown="btnsMenu.play()" id="alimentar" class="btn btn-outline-danger rounded-circle" role="button" href="#lista-comidas" data-toggle="modal">
+                                            <i class="fas fa-utensils"></i>
+                                        </a>
+                                    <?php } ?>
                                 </th>
                                 <th scope="col">
                                     <form action="listagem-pet.php" method="post">
                                         <input type="hidden" id="banho" name="banho"></input>
                                         <input type="hidden" id="petID" name="petID" value="<?=$petAtual['idPet'];?>"></input>
-                                        <button type="submit" class="btn btn-outline-primary rounded-circle">
+                                        <button onmousedown="btnBanho.play()" type="submit" class="btn btn-outline-primary rounded-circle">
                                             <i class="fas fa-shower"></i>
                                         </button>
                                     </form>
                             </th>
                             <th scope="col">
-                                <a id="minigame" class="btn btn-outline-success rounded-circle"  role="button" href="#lista-minigames" data-toggle="modal">
-                                    <i class="fas fa-gamepad"></i>
-                                </a>
+                                <?php if($petAtual['statePet'] == 'dormindo'){ ?>
+                                    <a class="btn btn-outline-success rounded-circle disabled" role="button">
+                                        <i class="fas fa-gamepad"></i>
+                                    </a>
+                                <?php } else{ ?>
+                                    <a onmousedown="btnsMenu.play()" id="minigame" class="btn btn-outline-success rounded-circle"  role="button" href="#lista-minigames" data-toggle="modal">
+                                        <i class="fas fa-gamepad"></i>
+                                    </a>
+                                <?php } ?>
                             </th>
                             <th scope="col">
                                 <form action="listagem-pet.php" method="post">
                                     <input type="hidden" id="dormir" name="dormir"></input>
                                     <input type="hidden" id="petIDDormir" name="petIDDormir" value="<?=$petAtual['idPet'];?>"></input>
-                                    <button type="submit" class="btn btn-outline-info rounded-circle">
-                                        <i class="fas fa-bed"></i>  
-                                    </button>
+                                    <?php if($petAtual['statePet'] == 'dormindo'){?>
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-outline-warning rounded-circle">
+                                            <i class="fas fa-sun"></i>  
+                                        </button>
+                                    <?php } else{?>
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-outline-info rounded-circle">
+                                            <i class="fas fa-bed"></i>  
+                                        </button>
+                                    <?php } ?>
                                 </form>
                             </th>
                             <th scope="col">
                                 <form action="listagem-pet.php" method="post">
                                     <input type="hidden" id="cura" name="cura"></input>
                                     <input type="hidden" id="petIDCura" name="petIDCura" value="<?=$petAtual['idPet'];?>"></input>
-                                    <button type="submit" class="btn btn-outline-danger rounded-circle">
+                                    <button onmousedown="btnNS.play()" type="submit" class="btn btn-outline-danger rounded-circle">
                                         <i class="fas fa-syringe"></i>
                                     </button>
                                 </form>
                             </th>
                             <th scope="col">
                                 <form action="listagem-pet.php" method="post">
-                                    <button name="deletar" class="btn btn-outline-secondary rounded-circle" type="submit">
+                                    <button onmousedown="btnMorte.play()" name="deletar" class="btn btn-outline-secondary rounded-circle" type="submit">
                                         <i class="fas fa-skull"></i>
                                     </button>
                                 </form>

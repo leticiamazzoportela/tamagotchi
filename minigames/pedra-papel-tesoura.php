@@ -40,12 +40,25 @@
 
          -->
         </head>
+
+        <script type="text/javascript">
+            var btnPlim = new Audio(); 
+            btnPlim.src = "../songs/plim.wav";
+
+            var btnNS = new Audio(); 
+            btnNS.src = "../songs/novo.wav";
+        </script>
+
+        <audio id="bg" autoplay="autoplay" loop="loop">
+            <source src="../songs/bg.mp3" type="audio/mp3" />
+            seu navegador não suporta HTML5
+        </audio>
         
         <body style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
             <div class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                <a class="navbar-brand" href="../listagem-pet.php">Voltar</a>
+                <a onmousedown="btnNS.play()" class="navbar-brand" href="../listagem-pet.php">Voltar</a>
                 </div>
             </div>
             </div>
@@ -54,9 +67,9 @@
                         <h1>Pedra - Papel - Tesoura</h1>
                         <br />
                         <form action="pedra-papel-tesoura.php?idP=<?= $idP?>" method="post">
-                                <input name="pedra" type="image" src="https://vignette.wikia.nocookie.net/sonicboombrasilbr/images/c/c7/Pedra_da_justi%C3%A7a.png/revision/latest?cb=20150905020413&path-prefix=pt-br" width="135" height="135" alt="pedra" value="pedra"></input>
-                                <input name="papel" type="image" src="https://78.media.tumblr.com/cfc5ea8cc7b3708950a37c93b25b6d34/tumblr_p4fbotLnzJ1uke6wjo1_1280.png" width="135" height="135" alt="papel" value="papel"></input>
-                                <input name="tesoura" type="image" src="http://worldartsme.com/images/scissor-cartoon-clipart-1.jpg" width="135" height="140" alt="tesoura" value="tesoura"></input>
+                                <input onmousedown="btnPlim.play()" name="pedra" type="image" src="https://vignette.wikia.nocookie.net/sonicboombrasilbr/images/c/c7/Pedra_da_justi%C3%A7a.png/revision/latest?cb=20150905020413&path-prefix=pt-br" width="135" height="135" alt="pedra" value="pedra"></input>
+                                <input onmousedown="btnPlim.play()" name="papel" type="image" src="https://78.media.tumblr.com/cfc5ea8cc7b3708950a37c93b25b6d34/tumblr_p4fbotLnzJ1uke6wjo1_1280.png" width="135" height="135" alt="papel" value="papel"></input>
+                                <input onmousedown="btnPlim.play()" name="tesoura" type="image" src="http://worldartsme.com/images/scissor-cartoon-clipart-1.jpg" width="135" height="140" alt="tesoura" value="tesoura"></input>
                         </form>
                         <br><br>
                     </div>
