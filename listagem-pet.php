@@ -383,7 +383,7 @@
                             </td>
                             <td>
                                 <div class="progress">
-                                    <?php if($petAtual['healthPet'] < 50){?>
+                                    <?php if($petAtual['healthPet'] <= 40){?>
                                             <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['healthPet']; ?>%" aria-valuenow="<?=$petAtual['healthPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['healthPet']; ?>%</div>
                                             <?php } else { ?>
                                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <?=$petAtual['healthPet']; ?>%" aria-valuenow="<?=$petAtual['healthPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['healthPet']; ?>%</div>
@@ -399,8 +399,8 @@
                                             <?php } ?>
                                         </div>
                             </td>
-                            <td> <?php echo $petAtual['statePet']; ?></td>
-                            <td> <?php echo $petAtual['idade']; ?></td>
+                            <td style="font-weight: bold; font-style: italic;"> <?php echo $petAtual['statePet']; ?></td>
+                            <td style="font-weight: bold;"> <?php echo $petAtual['idade']; ?></td>
                             <?php// } ?>
                         </tr>
                     </tbody>

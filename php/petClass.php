@@ -157,7 +157,7 @@
                 $mysql=$this->mysql->prepare($queryDoente);
                 $mysql->execute();
 
-                if($doenteAtual <= 20){
+                if($doenteAtual <= 30){
                     $qDoente="UPDATE pet SET statePet = 'doente' WHERE idPet = $idPet";
                     $mysql=$this->mysql->prepare($qDoente);
                     $mysql->execute();
@@ -262,11 +262,11 @@
                 $src = 'tails-sujo.gif';
                 $fome = 100;
             }
-            if($felicidade < 30){
+            if($felicidade <= 30){
                 $estado = 'triste';
                 $src = 'tails-triste.gif';                
             }
-            else if(($felicidade > 50) && ($fome >= 80) && ($sono > 80) && ($saude > 80)){
+            else if(($felicidade > 50) && ($fome >= 70) && ($sono >= 70) && ($saude >= 70)){
                 $estado = 'feliz';
                 $src = 'tails-feliz.gif';
             }
@@ -274,7 +274,7 @@
                 $estado = 'cansado'; 
                 $src = 'tails-triste.gif';               
             }
-            if ($saude <= 20 && $saude > 0){
+            if ($saude <= 30 && $saude > 0){
                 $estado = 'doente';
                 $src = 'tails-doente.gif';
             }
@@ -288,6 +288,7 @@
             }
             if($state == 'dormindo'){
                 $estado = 'dormindo';
+                $src = 'tails-sleep.gif';
             }
 
             $queryState="UPDATE pet SET healthPet = $saude, happyPet = $felicidade, hungerPet = $fome, sleepPet = $sono, statePet = '$estado', idade = $idade WHERE idPet = $idPet";
@@ -297,6 +298,18 @@
                 $aparencia = "UPDATE pet SET imagem = '$src' WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($aparencia);
                 $mysql->execute();
+            }
+            else{
+                if($estado == 'dormindo'){
+                    $aparencia = "UPDATE pet SET imagem = 'bb-sleep.gif' WHERE idPet = $idPet";
+                    $mysql=$this->mysql->prepare($aparencia);
+                    $mysql->execute();
+                }
+                else{
+                    $aparencia = "UPDATE pet SET imagem = 'bb.gif' WHERE idPet = $idPet";
+                    $mysql=$this->mysql->prepare($aparencia);
+                    $mysql->execute();
+                }
             }
 
             $_SESSION["tempo"] = time();
@@ -311,7 +324,7 @@
             $state= $mysql->fetchColumn();
 
             if($state == 'morto'){
-                $queryNovo="UPDATE pet, minigames SET pet.healthPet = 50, pet.happyPet = 50, pet.hungerPet = 50, pet.sleepPet = 50, statePet = 'normal', pet.idade = 0, minigames.pontuacao = 0 WHERE pet.idPet = $idPet AND minigames.idPet = $idPet AND minigames.nomeMinigame = 'Pedra - Papel - Tesoura' OR minigames.nomeMinigame = 'Jogo da Velha'";
+                $queryNovo="UPDATE pet, minigames SET pet.healthPet = 50, pet.happyPet = 50, pet.hungerPet = 50, pet.sleepPet = 50, statePet = 'normal', pet.idade = 0, pet.imagem = 'bb.gif' minigames.pontuacao = 0 WHERE pet.idPet = $idPet AND minigames.idPet = $idPet AND minigames.nomeMinigame = 'Pedra - Papel - Tesoura' OR minigames.nomeMinigame = 'Jogo da Velha'";
                 $mysql=$this->mysql->prepare($queryNovo);
                 $mysql->execute();
                 echo "<script type='text/javascript'>alert('Infelizmente seu Pet Morreu! Ele vai ser reiniciado e terá todo o progresso nos minigames zerado!');javascript:window.location='listagem-pet.php';</script>";
@@ -470,7 +483,7 @@
             if ($state == 'feliz'){
                 $saude = $Dtime/300;
             }
-            if ($state == 'cansado' || $state == 'dormindo'){
+            if ($state == 'cansado'){
                 $saude = $Dtime/230;
             }
             if ($state == 'triste'){
@@ -479,7 +492,7 @@
             if ($state == 'fome'){
                 $saude = $Dtime/100;
             }
-            if ($state == 'doente'){
+            if ($state == 'doente'  || $state == 'dormindo'){
                 $saude = $Dtime/60;
             }
             if($state == 'morto')
@@ -503,9 +516,9 @@
             $mysql->execute();
             $estado = $mysql->fetchColumn();
 
-            if($statusDoente <= 20){
+            if($statusDoente <= 30){
                 $novoHealth = $statusDoente + 10;
-                if($novoHealth > 20){
+                if($novoHealth > 30){
                     $novoStatus = 'normal';
                 }
                 // else
@@ -513,7 +526,7 @@
         
             }
             else if($estado != 'doente'){
-                $novoHealth = 20;
+                $novoHealth = 30;
                 $novoStatus = 'doente';
             }
             else{
@@ -542,11 +555,11 @@
             $mysql->execute();
             $sleep = $mysql->fetchColumn();
 
-            if($estado == 'cansado'){
+            //if($estado == 'cansado'){
                 $query="UPDATE pet SET statePet = 'dormindo' WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($query);
                 $mysql->execute();
-            }
+            //}
             if($estado == 'dormindo'){
                if($sleep >= 50){
                     $query="UPDATE pet SET statePet = 'normal' WHERE idPet = $idPet";

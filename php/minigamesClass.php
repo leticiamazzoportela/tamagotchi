@@ -89,11 +89,11 @@
             $mysql=$this->mysql->prepare($query);
             $mysql->execute();
 
-            if($antigo > 50){
-                $query = "UPDATE pet SET statePet = 'feliz' WHERE idPet = $idPet";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
-            }
+            // if($antigo > 50){
+            //     $query = "UPDATE pet SET statePet = 'feliz' WHERE idPet = $idPet";
+            //     $mysql=$this->mysql->prepare($query);
+            //     $mysql->execute();
+            // }
         }
 
         protected function calcPontuacao($minigame, $idPet){
