@@ -244,6 +244,8 @@
             
             if($sono > 100)
                 $sono = 100;
+            else if($sono < 0)
+                $sono = 0;
 
             if($saude < 0)
                 $saude = 0;
@@ -324,7 +326,7 @@
             $state= $mysql->fetchColumn();
 
             if($state == 'morto'){
-                $queryNovo="UPDATE pet, minigames SET pet.healthPet = 50, pet.happyPet = 50, pet.hungerPet = 50, pet.sleepPet = 50, statePet = 'normal', pet.idade = 0, pet.imagem = 'bb.gif' minigames.pontuacao = 0 WHERE pet.idPet = $idPet AND minigames.idPet = $idPet AND minigames.nomeMinigame = 'Pedra - Papel - Tesoura' OR minigames.nomeMinigame = 'Jogo da Velha'";
+                $queryNovo="UPDATE pet, minigames SET pet.healthPet = 50, pet.happyPet = 50, pet.hungerPet = 50, pet.sleepPet = 50, statePet = 'normal', pet.idade = 0, pet.imagem = 'bb.gif', minigames.pontuacao = 0 WHERE pet.idPet = $idPet AND minigames.idPet = $idPet AND minigames.nomeMinigame = 'Pedra - Papel - Tesoura' OR minigames.nomeMinigame = 'Jogo da Velha'";
                 $mysql=$this->mysql->prepare($queryNovo);
                 $mysql->execute();
                 echo "<script type='text/javascript'>alert('Infelizmente seu Pet Morreu! Ele vai ser reiniciado e terá todo o progresso nos minigames zerado!');javascript:window.location='listagem-pet.php';</script>";
@@ -502,6 +504,7 @@
                 $health = $health + $saude;
             else
                 $health = $health - $saude;
+                
             return $health;
         }
 

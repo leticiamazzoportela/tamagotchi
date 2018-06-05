@@ -366,7 +366,7 @@
                             <td>
                                 <div class="progress">
                                     <?php if($petAtual['happyPet'] < 50){?>
-                                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['happyPet']; ?>%" aria-valuenow="<?=$petAtual['happyPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['happyPet']; ?>%</div>
+                                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['happyPet']; ?>%; color: black;" aria-valuenow="<?=$petAtual['happyPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['happyPet']; ?>%</div>
                                         <?php } else { ?>
                                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <?=$petAtual['happyPet']; ?>%" aria-valuenow="<?=$petAtual['happyPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['happyPet']; ?>%</div>
                                             <?php } ?>
@@ -375,7 +375,7 @@
                             <td>
                                 <div class="progress">
                                     <?php if($petAtual['hungerPet'] < 50){?>
-                                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['hungerPet']; ?>%" aria-valuenow="<?=$petAtual['hungerPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['hungerPet']; ?>%</div>
+                                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['hungerPet']; ?>%; color: black;" aria-valuenow="<?=$petAtual['hungerPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['hungerPet']; ?>%</div>
                                         <?php } else { ?>
                                         <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <?=$petAtual['hungerPet']; ?>%" aria-valuenow="<?=$petAtual['hungerPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['hungerPet']; ?>%</div>
                                         <?php } ?>
@@ -384,7 +384,7 @@
                             <td>
                                 <div class="progress">
                                     <?php if($petAtual['healthPet'] <= 40){?>
-                                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['healthPet']; ?>%" aria-valuenow="<?=$petAtual['healthPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['healthPet']; ?>%</div>
+                                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['healthPet']; ?>%; color: black;" aria-valuenow="<?=$petAtual['healthPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['healthPet']; ?>%</div>
                                             <?php } else { ?>
                                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <?=$petAtual['healthPet']; ?>%" aria-valuenow="<?=$petAtual['healthPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['healthPet']; ?>%</div>
                                             <?php } ?>
@@ -393,7 +393,7 @@
                             <td>
                                 <div class="progress">
                                         <?php if($petAtual['sleepPet'] < 50){?>
-                                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['sleepPet']; ?>%" aria-valuenow="<?=$petAtual['sleepPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['sleepPet']; ?>%</div>
+                                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: <?=$petAtual['sleepPet']; ?>%; color: black;" aria-valuenow="<?=$petAtual['sleepPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['sleepPet']; ?>%</div>
                                             <?php } else { ?>
                                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <?=$petAtual['sleepPet']; ?>%" aria-valuenow="<?=$petAtual['sleepPet']; ?>" aria-valuemin="0" aria-valuemax="100"><?=$petAtual['sleepPet']; ?>%</div>
                                             <?php } ?>

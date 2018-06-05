@@ -71,6 +71,7 @@
             $mysql = $this->mysql->prepare($pontos);
             $mysql->execute();
             $happy= $mysql->fetchColumn();
+            echo $happy;
 
             $hp = "SELECT happyPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($hp);
@@ -78,17 +79,24 @@
             $antigo= $mysql->fetchColumn();
 
             $hunger = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
-            $mysql = $this->mysql->prepare($hp);
+            $mysql = $this->mysql->prepare($hunger);
             $mysql->execute();
             $antigoHunger = $mysql->fetchColumn();
 
             $antigo = $antigo + $happy*2;
+            if($antigo > 100){
+                $antigo = 100;
+            }
+
             $antigoHunger = $antigoHunger - $happy*2;
+            if($antigoHunger < 0)
+                $antigoHunger = 0;
 
             $query = "UPDATE pet SET happyPet = $antigo, hungerPet = $antigoHunger WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($query);
             $mysql->execute();
-
+            
+            return $happy;
             // if($antigo > 50){
             //     $query = "UPDATE pet SET statePet = 'feliz' WHERE idPet = $idPet";
             //     $mysql=$this->mysql->prepare($query);
@@ -108,7 +116,9 @@
             $mysql=$this->mysql->prepare($ppt);
             $mysql->execute();
 
-            $this->animar($idPet);
+            $oi = $this->animar($idPet);
+            echo $oi;
+
         }
         
         public function jogar($item, $idPet){
