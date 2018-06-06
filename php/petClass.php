@@ -45,7 +45,7 @@
 
             error_log($id);             
             if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, idUsuario) VALUES (:nomePet, 50, 50, 50, 50, 'normal', '$src', 0, '$id')";
+                $sql="INSERT INTO pet (nomePet, happyPet, hungerPet, healthPet, sleepPet, statePet, imagem, idade, peso, idUsuario) VALUES (:nomePet, 50, 50, 50, 50, 'normal', '$src', 0, 1, '$id')";
                 $mysql=$this->mysql->prepare($sql);
                 $mysql->bindValue(':nomePet', $_POST['nomePet'],PDO::PARAM_STR);
                 try{
@@ -111,6 +111,11 @@
             $mysql->execute();
             $fomeAntiga = $mysql->fetchColumn();
 
+            $kg = "SELECT peso FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($kg);
+            $mysql->execute();
+            $peso = $mysql->fetchColumn();
+
             $happy = "SELECT happyPet FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($happy);
             $mysql->execute();
@@ -121,24 +126,30 @@
                     $fome = $fomeAntiga+10;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
+                $peso += 5;
             }
             else if($tipoComida == 'Rato'){
                 if($fomeAntiga <= 92)
                     $fome = $fomeAntiga+8;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
+                $peso += 4;
             }
             else if($tipoComida == 'Pássaro'){
                 if($fomeAntiga <= 95)
                     $fome = $fomeAntiga+5;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
+
+                $peso += 3;
             }
             else if($tipoComida == 'Fruta'){
                 if($fomeAntiga <= 97)
                     $fome = $fomeAntiga+3;
                 else
                     $fome = (100 - $fomeAntiga) + $fomeAntiga;
+
+                $peso += 2;
             }
             else if($tipoComida == 'Inseto'){
                 //Essa alimenta ele, mas deixa ele doentinho
@@ -146,6 +157,8 @@
                 $mysql = $this->mysql->prepare($doente);
                 $mysql->execute();
                 $doenteAntiga = $mysql->fetchColumn();
+
+                $peso += 1;
 
                 if($fomeAntiga <= 99)
                     $fome = $fomeAntiga+1;
@@ -168,8 +181,8 @@
                 
                 }
             }
-            
-            $query="UPDATE pet SET hungerPet = $fome WHERE idPet = $idPet";
+
+            $query="UPDATE pet SET hungerPet = $fome, peso = $peso WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($query);
             $mysql->execute();
 
@@ -200,7 +213,7 @@
             $hp = $mysql->fetchColumn();
 
 
-            $cons = "SELECT hungerPet FROM pet WHERE idPet = $idPet";
+            $cons = "SELECT peso FROM pet WHERE idPet = $idPet";
             $mysql = $this->mysql->prepare($cons);
             $mysql->execute();
             $c = $mysql->fetchColumn();
@@ -210,7 +223,7 @@
 
 
             if($estado == 'sujo'){
-                $query="UPDATE pet SET statePet = 'normal', healthPet = $novoHp, hungerPet = $novoC WHERE idPet = $idPet";
+                $query="UPDATE pet SET statePet = 'normal', healthPet = $novoHp, peso = $novoC, hungerPet = 99 WHERE idPet = $idPet";
                 $mysql=$this->mysql->prepare($query);
                 $mysql->execute();
                 header('Location: ./listagem-pet.php');
@@ -231,6 +244,11 @@
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             $state= $mysql->fetchColumn();
+
+            $kg = "SELECT peso FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($kg);
+            $mysql->execute();
+            $peso = $mysql->fetchColumn();
 
             $fome = $this->hungry($Dtime, $state, $idPet);
             $felicidade = $this->happy($Dtime, $state, $idPet);
@@ -265,7 +283,7 @@
             }
             if($fome >= 100){
                 $estado = 'sujo';
-                $src = 'tails-sujo.gif';
+                $src = 'tails-sujo-grande.gif';
                 $fome = 100;
             }
             if($felicidade <= 30){
@@ -290,7 +308,7 @@
             }
             if($state == 'sujo'){
                 $estado = 'sujo';
-                $src = 'tails-sujo.gif';
+                $src = 'tails-sujo-grande.gif';
             }
             if($state == 'dormindo'){
                 $estado = 'dormindo';
@@ -308,6 +326,11 @@
             else{
                 if($estado == 'dormindo'){
                     $aparencia = "UPDATE pet SET imagem = 'bb-sleep.gif' WHERE idPet = $idPet";
+                    $mysql=$this->mysql->prepare($aparencia);
+                    $mysql->execute();
+                }
+                else if($estado == 'sujo'){
+                    $aparencia = "UPDATE pet SET imagem = 'bb-sujo.gif' WHERE idPet = $idPet";
                     $mysql=$this->mysql->prepare($aparencia);
                     $mysql->execute();
                 }

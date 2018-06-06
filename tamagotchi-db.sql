@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `pet` (
   `imagem` varchar(100) NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `idade` int(11) NOT NULL,
+  `peso` int(11) NOT NULL,
   PRIMARY KEY (`idPet`),
   KEY `idUsuario` (`idUsuario`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;

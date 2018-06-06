@@ -8,16 +8,16 @@
     
     $pets = new Pet();
     $resultado = $pets->listarPets();
+       
 
     /**** LISTAR PETS DISPONÍVEIS E TROCAR*/
         if(isset($_POST['petAtual']))  
             $teste = $_POST['petAtual'];
-        else
+        else if(count($resultado) > 0)
             $teste = $resultado[0]['idPet'];
 
-        if($teste != 0){
+        if(!empty($teste))
             $petAtual = $pets->retPet($teste);
-        }
         else
             header('Location: ./criarPet.php');
 
@@ -110,15 +110,8 @@
         <link rel="stylesheet" type="text/css" href="css/general.css">
         <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
- 
-     <!-- <meta http-equiv="refresh" content="60"> -->
 
         </head>
-
-        <!-- <audio id="bg" autoplay="autoplay" loop="loop">
-            <source src="songs/bg.mp3" type="audio/mp3" />
-            seu navegador não suporta HTML5
-        </audio> -->
 
         <script type="text/javascript">
             var btnsMenu = new Audio();
@@ -136,15 +129,10 @@
             btnPlayBg.src = "songs/bg.mp3";
             //var btnPlayBg = document.getElementById("bg");
 
-            btnPlayBg.autoplay = true;
+            //btnPlayBg.autoplay = true;
             function tempo(){
                 setInterval(function(){
                     window.location.reload();
-                    // if(btnPlayBg.played)
-                    //     btnPlayBg.pause();
-
-                    // if(btnPlayBg.paused)
-                    //     btnPlayBg.play();
                     },60000);
             }
             
@@ -218,14 +206,14 @@
                                         <button onmousedown="btnNS.play()" type="submit" class="btn btn-primary">
                                             <?php echo $name['nomePet'];?>
                                         </button>
-                                        <button style="float: right;" onmousedown="btnUp.play()" type="submit" class="btn btn-outline-danger rounded-circle" id="apagar" name="apagar">
+                                        <button style="float: right;" onmousedown="btnMorte.play()" type="submit" class="btn btn-outline-danger rounded-circle" id="apagar" name="apagar">
                                             <i class="fas fa-skull"></i>
                                         </button>
                                     <?php } else{ ?>
                                         <button onmousedown="btnNS.play()" type="submit" class="btn btn-info">
                                             <?php echo $name['nomePet'];?>
                                         </button>
-                                        <button style="float: right;" onmousedown="btnUp.play()" type="submit" class="btn btn-outline-danger rounded-circle" id="apagar" name="apagar">
+                                        <button style="float: right;" onmousedown="btnMorte.play()" type="submit" class="btn btn-outline-danger rounded-circle" id="apagar" name="apagar">
                                             <i class="fas fa-skull"></i>
                                         </button>
                                     <?php }?>
@@ -352,11 +340,37 @@
             </div>
         </div> <!-- Fim Modal Alimentar -->
 
-        <br>
+        <!-- MODAL PESO -->
+        <div class="modal fade" id="peso" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info" style="color: white;">
+                        <h4 class="modal-title" id="modalLabel">Peso</h4>
+                        <button type="button" style="color: white" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h1 class="text-center"><?php echo $petAtual['peso'];?> Kg<h1>
+                    </div>
+                    <!-- <div class="modal-footer"> -->
+                    <?php if($petAtual['idade'] < 4){?>
+                        <p class="text-center" style="font-weight: bold;">Peso ideal: 7 Kg</p>
+                        <?php if($petAtual['peso'] > 7){?>
+                            <p class="text-center" style="font-weight: bold; color: red"><br>Preciso brincar! Estou ficando gordo!</p>
+                        <?php } ?>
+                    <?php } else {?>
+                        <p class="text-center" style="font-weight: bold;">Peso ideal: 14 Kg</p>
+                        <?php if($petAtual['peso'] > 14){?>
+                            <p class="text-center" style="font-weight: bold; color: red">Preciso brincar! Estou ficando gordo!</p>
+                        <?php } ?>
+                    <?php }?>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div> <!-- Fim Modal -->
 
-        <!-- <audio controls="autoplay" height="50px" width="100px" type="hidden">
-        <source src="songs/bg.mp3" type="audio/mpeg" />
-        </audio> -->
+        <br>
 
         <div class="container" style="margin-left: 5%;"> <!-- Área com dados do Pet -->
             <div align="center" style="width: 50%; margin-left: 25%;">
@@ -494,14 +508,11 @@
                                     </button>
                                 </form>
                             </th>
-                            <!-- <th scope="col">
-                                <form action="listagem-pet.php" method="post">
-                                    <button onmousedown="btnMorte.play()" name="deletar" class="btn btn-outline-secondary rounded-circle" type="submit">
-                                        <i class="fas fa-skull"></i>
-                                    </button>
-                                </form>
-                                
-                            </th> -->
+                            <th scope="col">
+                                <a onmousedown="btnsMenu.play()" name="peso" class="btn btn-outline-info rounded-circle" role="button" href="#peso" data-toggle="modal">
+                                    <i class="fas fa-weight"></i>
+                                </a>
+                            </th>
                         </tr>
                     </thead>
                 </table>    

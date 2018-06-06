@@ -83,6 +83,11 @@
             $mysql->execute();
             $antigoHunger = $mysql->fetchColumn();
 
+            $kg = "SELECT peso FROM pet WHERE idPet = $idPet";
+            $mysql = $this->mysql->prepare($kg);
+            $mysql->execute();
+            $peso = $mysql->fetchColumn();
+
             $antigo = $antigo + $happy*2;
             if($antigo > 100){
                 $antigo = 100;
@@ -92,7 +97,11 @@
             if($antigoHunger < 0)
                 $antigoHunger = 0;
 
-            $query = "UPDATE pet SET happyPet = $antigo, hungerPet = $antigoHunger WHERE idPet = $idPet";
+            $peso -= 2;
+            if($peso < 0)
+                $peso = 0;
+
+            $query = "UPDATE pet SET happyPet = $antigo, hungerPet = $antigoHunger, peso = $peso WHERE idPet = $idPet";
             $mysql=$this->mysql->prepare($query);
             $mysql->execute();
             

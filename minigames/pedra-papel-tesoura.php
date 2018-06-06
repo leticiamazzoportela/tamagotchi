@@ -42,6 +42,9 @@
         <script type="text/javascript">
             var btnPlim = new Audio(); 
             btnPlim.src = "../songs/plim.wav";
+            
+            var btnsMenu = new Audio();
+            btnsMenu.src = "../songs/options.wav";
 
             var btnNS = new Audio(); 
             btnNS.src = "../songs/novo.wav";
