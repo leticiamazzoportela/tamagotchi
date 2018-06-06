@@ -24,9 +24,8 @@
 
         public function retPet($petAtual){
             //if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $sql="SELECT * FROM `pet` WHERE `pet`.`idPet` = '$petAtual'";
+                $sql="SELECT * FROM pet WHERE idPet = $petAtual";
                 $mysql=$this->mysql->prepare($sql);
-                $mysql->bindValue(':idPet', $petAtual,PDO::PARAM_INT);
                 $mysql->execute();
                 return $mysql->fetch(PDO::FETCH_ASSOC);
             //}
@@ -70,16 +69,21 @@
         }
 
         public function deletaPet(){
-            $id = $_SESSION["id_usuario"];
-            //if ($_SERVER['REQUEST_METHOD']=='POST') {
-                $query = "SELECT `idPet` FROM `pet` WHERE `idUsuario` = '".$id."'";
-                $mysql=$this->mysql->prepare($query);
-                $mysql->execute();
-                $idPet = $mysql->fetch(PDO::FETCH_ASSOC);
+            // $id = $_SESSION["id_usuario"];
+            // //if ($_SERVER['REQUEST_METHOD']=='POST') {
+            //     $query = "SELECT `idPet` FROM `pet` WHERE `idUsuario` = '".$id."'";
+            //     $mysql=$this->mysql->prepare($query);
+            //     $mysql->execute();
+            //     $idPet = $mysql->fetch(PDO::FETCH_ASSOC);
 
+            $idPet = $_SESSION["idPet"];
+            error_log('no delete', $_SESSION["idPet"]);
+            error_log( $_SESSION["idPet"]);
+            
+        
                 if(!empty($idPet)){
-                    foreach($idPet as $atual){
-                        $sql="DELETE FROM `pet` WHERE `idPet` = '".$atual."'";   
+//                    foreach($idPet as $atual){
+                        $sql="DELETE FROM `pet` WHERE `idPet` = $idPet";   
                         $mysql=$this->mysql->prepare($sql);
                         
                         try{
@@ -90,10 +94,10 @@
                             echo $e->getMessage();
                         }
 
-                            $minigame = "DELETE FROM minigames WHERE idPet = $atual";
+                            $minigame = "DELETE FROM minigames WHERE idPet = $idPet";
                             $mysql=$this->mysql->prepare($minigame);
                             $mysql->execute();
-                    }    
+                    //}    
                 }
                 else{
                     echo "<script type='text/javascript'>alert('Não há Pets para excluir!');javascript:window.location='listagem-pet.php';</script>";

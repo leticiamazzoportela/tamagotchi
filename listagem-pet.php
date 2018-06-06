@@ -12,23 +12,25 @@
     /**** LISTAR PETS DISPONÍVEIS E TROCAR*/
         if(isset($_POST['petAtual']))  
             $teste = $_POST['petAtual'];
-        else if(count($resultado) > 0)
-                $teste = $resultado[0]['idPet'];
+        else
+            $teste = $resultado[0]['idPet'];
 
-        if(!empty($teste))
+        if($teste != 0){
             $petAtual = $pets->retPet($teste);
+        }
         else
             header('Location: ./criarPet.php');
-    
 
-          //$_SESSION["tempo"] = time();
+          $_SESSION["idPet"] = $petAtual['idPet'];
+          
           $pets->controleEstadosGerais($petAtual['idPet']);
           $pets->reiniciarPet($petAtual['idPet']);
     /**FIM LISTAR PETS DISPONÍVEIS */
 
     /** MATAR PET */
-        if(isset($_POST['deletar']))
+        if(isset($_POST['apagar'])){
             $pets->deletaPet();
+        }
     /** FIM MATAR PET */
 
     /** CONTROLE MINIGAME */
@@ -216,9 +218,15 @@
                                         <button onmousedown="btnNS.play()" type="submit" class="btn btn-primary">
                                             <?php echo $name['nomePet'];?>
                                         </button>
+                                        <button style="float: right;" onmousedown="btnUp.play()" type="submit" class="btn btn-outline-danger rounded-circle" id="apagar" name="apagar">
+                                            <i class="fas fa-skull"></i>
+                                        </button>
                                     <?php } else{ ?>
                                         <button onmousedown="btnNS.play()" type="submit" class="btn btn-info">
                                             <?php echo $name['nomePet'];?>
+                                        </button>
+                                        <button style="float: right;" onmousedown="btnUp.play()" type="submit" class="btn btn-outline-danger rounded-circle" id="apagar" name="apagar">
+                                            <i class="fas fa-skull"></i>
                                         </button>
                                     <?php }?>
                                 </form>
@@ -298,12 +306,14 @@
                                     <input type="hidden" id="petM" name="petM" value="<?=$minigame['idPet']?>"></input>
                                     <input type="hidden" id="minigameAtual" name="minigameAtual" value="<?=$minigame['nomeMinigame']?>"</input>
                                     <?php if($idM == 'Jogo da Velha'){?>
-                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-success">
-                                            <?php echo $minigame['nomeMinigame'];?>
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-outline-success">
+                                            <!-- <//?php echo $minigame['nomeMinigame'];?> -->
+                                            <img src="https://png.icons8.com/dusk/40/000000/hashtag.png">
                                         </button>
                                     <?php } else {?>
-                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-danger">
-                                            <?php echo $minigame['nomeMinigame'];?>
+                                        <button onmousedown="btnNS.play()" type="submit" class="btn btn-outline-primary">
+                                            <!-- <//?php echo $minigame['nomeMinigame'];?> -->
+                                            <img src="https://png.icons8.com/ultraviolet/40/000000/star-trek-gesture.png">
                                         </button>
                                     <?php }?>
                                 </form>
@@ -326,11 +336,11 @@
                     </div>
                     <div class="modal-body">
                         <form action="listagem-pet.php" method="post">
-                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Coelho" name="Coelho" value="Coelho"></input>
-                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Rato" name="Rato" value="Rato"></input>
-                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Pássaro" name="Pássaro" value="Pássaro"></input>
-                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Fruta" name="Fruta" value="Fruta"></input>
-                            <input onmousedown="btnUp.play()" type="submit" class="btn btn-danger" id="Inseto" name="Inseto" value="Inseto"></input>
+                            <button onmousedown="btnUp.play()" type="submit" class="btn btn-outline-info" id="Coelho" name="Coelho" value="Coelho"><img src="https://png.icons8.com/office/40/000000/rabbit.png"></button>
+                            <button onmousedown="btnUp.play()" type="submit" class="btn btn-outline-success" id="Rato" name="Rato" value="Rato"><img src="https://png.icons8.com/color/40/000000/animation.png"></button>
+                            <button onmousedown="btnUp.play()" type="submit" class="btn btn-outline-warning" id="Pássaro" name="Pássaro" value="Pássaro"><img src="https://png.icons8.com/color/40/000000/bird.png"></button>
+                            <button onmousedown="btnUp.play()" type="submit" class="btn btn-outline-danger" id="Fruta" name="Fruta" value="Fruta"><img src="https://png.icons8.com/color/40/000000/strawberry.png"></button>
+                            <button onmousedown="btnUp.play()" type="submit" class="btn btn-outline-dark" id="Inseto" name="Inseto" value="Inseto"><img src="https://png.icons8.com/color/40/000000/insect.png"></button>
                             <input onmousedown="btnUp.play()" type="hidden" id="petFome" name="petFome" value="<?=$petAtual['idPet'];?>"></input>
                         </form>
                         <br><br>
@@ -484,14 +494,14 @@
                                     </button>
                                 </form>
                             </th>
-                            <th scope="col">
+                            <!-- <th scope="col">
                                 <form action="listagem-pet.php" method="post">
                                     <button onmousedown="btnMorte.play()" name="deletar" class="btn btn-outline-secondary rounded-circle" type="submit">
                                         <i class="fas fa-skull"></i>
                                     </button>
                                 </form>
                                 
-                            </th>
+                            </th> -->
                         </tr>
                     </thead>
                 </table>    

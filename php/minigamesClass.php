@@ -123,15 +123,32 @@
         
         public function jogar($item, $idPet){
             if(!empty($item)){
-                $itens = array('pedra', 'papel', 'tesoura');
+                $itens = array('pedra', 'papel', 'tesoura', 'lagarto', 'spock');
 
                 $user_item = $item;
-                $comp_item = $itens[rand(0, 2)];
+                $comp_item = $itens[rand(0, 4)];
 
-                //Pedra > Tesoura
-                //Tesoura > Papel
-                //Papel > Pedra
-                if(($user_item == 'pedra' && $comp_item == 'tesoura') || ($user_item == 'tesoura' && $comp_item == 'papel') || ($user_item == 'papel' && $comp_item == 'pedra')){
+                // Tesoura corta papel
+                // Papel cobre pedra
+                // Pedra esmaga lagarto
+                // Lagarto envenena Spock
+                // Spock esmaga (ou derrete) tesoura
+                // Tesoura decapita lagarto
+                // Lagarto come papel
+                // Papel refuta Spock
+                // Spock vaporiza pedra
+                // Pedra quebra tesoura
+
+                if(($user_item == 'pedra' && $comp_item == 'tesoura') ||
+                   ($user_item == 'tesoura' && $comp_item == 'papel') ||
+                   ($user_item == 'papel' && $comp_item == 'pedra') ||
+                   ($user_item == 'pedra' && $comp_item == 'lagarto') ||
+                   ($user_item == 'lagarto' && $comp_item == 'spock') ||
+                   ($user_item == 'spock' && $comp_item == 'tesoura') ||
+                   ($user_item == 'tesoura' && $comp_item == 'lagarto') ||
+                   ($user_item == 'lagarto' && $comp_item == 'papel') ||
+                   ($user_item == 'papel' && $comp_item == 'spock') ||
+                   ($user_item == 'spock' && $comp_item == 'pedra')){
                     $this->calcPontuacao('Pedra - Papel - Tesoura', $idPet);
                    echo "<script type='text/javascript'>alert('Você: $user_item \\nComputador: $comp_item \\nVocê venceu!');javascript:window.location='pedra-papel-tesoura.php?idP=$idPet';</script>";
                 }
@@ -216,7 +233,7 @@
 
         public function ranking(){
             ///$id = $_SESSION["id_usuario"];
-            $sql = "SELECT DISTINCT pet.idUsuario, pet.nomePet, minigames.nomeMinigame FROM pet, minigames ORDER BY minigames.pontuacao DESC";
+            $sql = "SELECT DISTINCT pet.idUsuario, pet.nomePet, minigames.nomeMinigame, minigames.pontuacao FROM pet, minigames ORDER BY minigames.pontuacao DESC";
             $mysql = $this->mysql->prepare($sql);
             $mysql->execute();
             return $mysql->fetchAll(PDO::FETCH_ASSOC);

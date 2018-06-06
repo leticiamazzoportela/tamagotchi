@@ -2,18 +2,16 @@
     $idP = $_GET['idP'];
     require '../php/minigamesClass.php';
     $game = new Minigame();
-    if(isset($_POST['pedra'])){
-        $pedra = $_POST['pedra'];
-        $game->jogar($pedra, $idP);
-    }
-    else if(isset($_POST['papel'])){
-        $papel = $_POST['papel'];
-        $game->jogar($papel, $idP);
-    }
-    else if(isset ($_POST['tesoura'])){
-        $tesoura = $_POST['tesoura'];
-        $game->jogar($tesoura, $idP);
-    }
+    if(isset($_POST['pedra']))
+        $game->jogar($_POST['pedra'], $idP);
+    else if(isset($_POST['papel']))
+        $game->jogar($_POST['papel'], $idP);
+    else if(isset($_POST['tesoura']))
+        $game->jogar($_POST['tesoura'], $idP);
+    else if(isset($_POST['lagarto']))
+        $game->jogar($_POST['lagarto'], $idP);
+    else if(isset($_POST['spock']))
+        $game->jogar($_POST['spock'], $idP);
     
 ?>
 
@@ -53,6 +51,32 @@
             <source src="../songs/bg.mp3" type="audio/mp3" />
             seu navegador não suporta HTML5
         </audio>
+
+        <!-- MODAL -->
+        <div class="modal fade" id="info-jogo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary" style="color: white;">
+                        <h4 class="modal-title" id="modalLabel">Instruções</h4>
+                        <button type="button" style="color: white" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <p style="font-style: italic" class="text-center"> Tesoura corta papel <br>
+                        Papel cobre pedra <br>
+                        Pedra esmaga lagarto <br>
+                        Lagarto envenena Spock <br>
+                        Spock esmaga (ou derrete) tesoura <br>
+                        Tesoura decapita lagarto <br>
+                        Lagarto come papel <br>
+                        Papel refuta Spock <br>
+                        Spock vaporiza pedra <br>
+                        Pedra quebra tesoura <p>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Fim Modal -->
         
         <body style="background-image: url(https://i.pinimg.com/originals/61/eb/53/61eb53cd52828503dd2dd8cc3d6abc9e.png); background-size: 100%; background-position: center top; background-repeat: no-repeat;">
             <div class="navbar navbar-default navbar-static-top" role="navigation">
@@ -64,12 +88,17 @@
             </div>
                 <div class="container" id="ppt">
                     <div class="jumbotron text-center" style="width: 50%; margin-left: 25%;">
-                        <h1>Pedra - Papel - Tesoura</h1>
+                        <a style="float: right" onmousedown="btnsMenu.play()" id="infos" class="btn btn-outline-danger" role="button" href="#info-jogo" data-toggle="modal">
+                            <i class="fas fa-info"></i>
+                        </a>
+                        <h3>Pedra - Papel - Tesoura - Lagarto - Spock </h3>
                         <br />
                         <form action="pedra-papel-tesoura.php?idP=<?= $idP?>" method="post">
-                                <input onmousedown="btnPlim.play()" name="pedra" type="image" src="https://vignette.wikia.nocookie.net/sonicboombrasilbr/images/c/c7/Pedra_da_justi%C3%A7a.png/revision/latest?cb=20150905020413&path-prefix=pt-br" width="135" height="135" alt="pedra" value="pedra"></input>
-                                <input onmousedown="btnPlim.play()" name="papel" type="image" src="https://78.media.tumblr.com/cfc5ea8cc7b3708950a37c93b25b6d34/tumblr_p4fbotLnzJ1uke6wjo1_1280.png" width="135" height="135" alt="papel" value="papel"></input>
-                                <input onmousedown="btnPlim.play()" name="tesoura" type="image" src="http://worldartsme.com/images/scissor-cartoon-clipart-1.jpg" width="135" height="140" alt="tesoura" value="tesoura"></input>
+                                <button onmousedown="btnPlim.play()" name="pedra" type="submit" class="btn btn-outline-secondary" alt="pedra" value="pedra"><img class="btn-lg" src="https://png.icons8.com/color/40/000000/hand-rock.png"></img></button> <br><br>
+                                <button onmousedown="btnPlim.play()" style="float: left" name="papel" class="btn btn-outline-danger" type="submit" alt="papel" value="papel"><img class="btn-lg" src="https://png.icons8.com/color/40/000000/hand.png"></button>
+                                <button onmousedown="btnPlim.play()" style="float: right" class="btn btn-outline-info" name="tesoura" type="submit" alt="tesoura" value="tesoura"><img class="btn-lg" src="https://png.icons8.com/color/40/000000/hand-scissors.png"></button> <br><br><br><br>
+                                <button onmousedown="btnPlim.play()" style="margin-right: 10%; margin-top: 10%" class="btn btn-outline-success" name="lagarto" type="submit" alt="lagarto" value="lagarto"><img class="btn-lg" src="https://png.icons8.com/color/40/000000/hand-lizard.png"></button>
+                                <button onmousedown="btnPlim.play()" style="margin-left: 10%; margin-top: 10%" class="btn btn-outline-warning" name="spock" type="submit" alt="spock" value="spock"><img class="btn-lg" src="https://png.icons8.com/color/40/000000/star-trek-gesture.png"></button>
                         </form>
                         <br><br>
                     </div>
