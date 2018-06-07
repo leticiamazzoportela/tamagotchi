@@ -277,7 +277,7 @@
             $estado = 'normal';
             $src = 'tails-normal.gif';
 
-            if ($fome < 50){
+            if ($fome <= 49){
                 $estado = 'fome';
                 $src = 'tails-bravo.gif';
             }
@@ -294,7 +294,7 @@
                 $estado = 'feliz';
                 $src = 'tails-feliz.gif';
             }
-            if ($sono < 50){
+            if ($sono <= 49){
                 $estado = 'cansado'; 
                 $src = 'tails-triste.gif';               
             }
@@ -353,7 +353,7 @@
             $state= $mysql->fetchColumn();
 
             if($state == 'morto'){
-                $queryNovo="UPDATE pet, minigames SET pet.healthPet = 50, pet.happyPet = 50, pet.hungerPet = 50, pet.sleepPet = 50, statePet = 'normal', pet.idade = 0, pet.imagem = 'bb.gif', minigames.pontuacao = 0 WHERE pet.idPet = $idPet AND minigames.idPet = $idPet AND minigames.nomeMinigame = 'Pedra - Papel - Tesoura' OR minigames.nomeMinigame = 'Jogo da Velha'";
+                $queryNovo="UPDATE pet, minigames SET pet.healthPet = 50, pet.happyPet = 50, pet.hungerPet = 50, pet.sleepPet = 50, statePet = 'normal', pet.idade = 0, pet.peso = 1, pet.imagem = 'bb.gif', minigames.pontuacao = 0 WHERE pet.idPet = $idPet AND minigames.idPet = $idPet AND minigames.nomeMinigame = 'Pedra - Papel - Tesoura' OR minigames.nomeMinigame = 'Jogo da Velha'";
                 $mysql=$this->mysql->prepare($queryNovo);
                 $mysql->execute();
                 echo "<script type='text/javascript'>alert('Infelizmente seu Pet Morreu! Ele vai ser reiniciado e terá todo o progresso nos minigames zerado!');javascript:window.location='listagem-pet.php';</script>";
@@ -513,7 +513,7 @@
                 $saude = $Dtime/300;
             }
             if ($state == 'cansado'){
-                $saude = $Dtime/230;
+                $saude = $Dtime/60;
             }
             if ($state == 'triste'){
                 $saude = $Dtime/180;
